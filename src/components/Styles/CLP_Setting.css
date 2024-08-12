@@ -1,0 +1,143 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.clp_setting_container{
+    background-color: #f1f1f1;
+}
+
+.clp_setting_container {
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+}
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+html, body {
+    height: 100%;
+  }
+
+  .clp_main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+  
+  .clp_settings_content {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;    
+  }
+  
+  .clp_settings_heading {
+    margin-top: 10px;
+    color: #091A44;
+    /* font-size: 24px; */
+    margin-bottom: 10px;
+   
+  }
+  
+  .clp_divider {
+    border: 0;
+    height: 1px;
+    background: #091A44;
+    margin: 20px 0;
+  }
+  
+  .clp_settings_body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .clp_image_container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .clp_image_container img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .clps_table_container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .clps_table_container table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .clps_table_container th, .clps_table_container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .clps_table_container th {
+    background-color: #091A44;
+    color: white;
+  }
+  
+  .clp_threshold_container {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .clp_threshold_input {
+    padding: 5px;
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+
+  /* Mobile view adjustments */
+  @media (max-width: 768px) {
+    .clp_settings_body {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+  
+    .clp_image_container, .clps_table_container {
+      width: 100%;
+      padding: 10px;
+    }
+  
+    .clps_table_container table {
+      font-size: 14px; /* Adjust font size for smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .clp_settings_heading {
+      font-size: 20px; /* Reduce font size on very small screens */
+    }
+  
+    .clps_table_container table {
+      font-size: 12px; /* Further reduce font size if needed */
+    }
+  
+    .clp_image_container img {
+      max-width: 90%; /* Adjust image size for very small screens */
+    }
+  }

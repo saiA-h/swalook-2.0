@@ -1,0 +1,209 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+
+}
+
+.owner_login_container {
+  height: 100vh; /* Full viewport height */
+  font-family: Montserrat, sans-serif;
+}
+
+.owner_logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.owner_S_logo {
+  width: 150px;
+  height: auto;
+}
+
+.owner_login_main {
+  display: flex;
+  height: 100%; /* Full container height */
+  width: 100vw;
+}
+
+.owner_login_main > div {
+  flex: 1;
+}
+
+.OL_input-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: large;
+}
+
+input[type="number"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  font-size: medium;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+ 
+}
+
+button {
+  background-color: #091A44;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-size: large;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.forgot-password {
+  margin-top: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #888;
+  text-align: center;
+}
+
+.forgot-password a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+.owner_login_head {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 35px;
+  color: #091A44;
+}
+
+.owner_form {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.owner_left {
+  margin-top: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.owner_right {
+  /* margin-top: 10px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.owner_loginbg {
+  background: url(../../assets/owner.png);
+  background-size: cover;
+  width: 60%;
+  height: 60%;
+  border-radius: 10px;
+  z-index: 1;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1));
+}
+
+.owner_welcome {
+  font-weight: bolder;
+  font-size: 60px;
+  color: white;
+  font-family: 'Calibri', sans-serif;
+}
+
+.welcome_text {
+  margin-left: 50px;
+  margin-top: 100px;
+}
+
+.owner_form {
+  width: 80%;
+}
+
+/* Responsive CSS */
+@media only screen and (max-width: 1024px) and (min-width: 769px) {
+  .owner_login_main {
+    flex-direction: column;
+  }
+
+  .owner_left,
+  .owner_right {
+    width: 100%;
+  }
+
+  .owner_right {
+    display: none; /* Hide owner_right on tablets */
+  }
+
+  .owner_logo {
+    justify-content: center; /* Center logo on tablets */
+  }
+
+  .owner_form {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .owner_login_main {
+    flex-direction: column;
+  }
+
+  .owner_left,
+  .owner_right {
+    width: 100%;
+  }
+
+  .owner_right {
+    display: none; /* Hide owner_right on tablets and mobile */
+  }
+
+  .owner_logo {
+    justify-content: center; /* Center logo on tablets and mobile */
+  }
+
+  .owner_form {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .owner_S_logo {
+    margin-left: 0; /* Adjust margin for smaller screens */
+    margin-top: -80px;
+  }
+
+  .owner_right {
+    display: none; /* Hide owner_right on mobile */
+  }
+
+  .owner_login_main {
+    margin-top: 10vh;
+  }
+
+  .owner_form {
+    width: 90%;
+  }
+
+  .owner_logo {
+    justify-content: center; /* Center logo on mobile */
+  }
+}

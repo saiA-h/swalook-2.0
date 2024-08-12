@@ -1,0 +1,96 @@
+.ec_popup_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.ec_popup_container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+  
+.ec_popup_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+.ec_popup_title h3 {
+    margin: 0;
+}
+  
+.ec_close_button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: red;
+}
+  
+.ec_divider {
+    border: 0;
+    border-top: 2px solid #091a44;
+    margin: 20px 0;
+}
+  
+.ec_field {
+    margin-bottom: 15px;
+}
+  
+.ec_field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+  
+.ec_field input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.ec_field select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+  
+.ec_button_container {
+    display: flex;
+    justify-content: center;
+}
+  
+.ec_save_button {
+    background-color: #091a44;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.ec_save_button:hover {
+    background-color: #0d234c;
+}
+  
+/* Responsive Design */
+@media (max-width: 768px) {
+    .ec_popup_container {
+        width: 95%;
+    }
+}

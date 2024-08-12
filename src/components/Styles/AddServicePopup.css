@@ -1,0 +1,96 @@
+.popup_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    backdrop-filter: blur(5px); /* Apply blur effect */
+    z-index: 999; /* Ensure it's above other elements */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center vertically and horizontally */
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .popup_container {
+    background-color: white;
+    border: 1px solid #ccc;
+    max-width: 90%; /* Adjust maximum width as needed */
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .popup_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .pph3 {
+    margin: 0;
+    flex-grow: 2;
+  }
+  
+  .close_button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: red;
+    margin-left: auto;
+  }
+  
+  .close_button:hover {
+    color: darkred;
+  }
+
+  .sn1, .sn2, .sn3 {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .sn1 label, .sn2 label, .sn3 label {
+    margin-right: 10px;
+    font-size: 15px;
+    font-weight: medium;
+  }
+  
+  .sn1 input, .sn2 input, .sn3 input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+  }
+  
+  .sn1 input:focus, .sn2 input:focus, .sn3 input:focus {
+    border-color: #666;
+  }
+
+  .sn_button_container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .sn_save_button {
+    background-color: #091A44;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .sn_save_button:hover {
+    opacity: 0.9;
+  }

@@ -1,0 +1,69 @@
+.vert_nav_main_c{
+    height: 320px;
+    display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     margin-top: 25vh;
+     background-color: #091A44;
+     border-top-right-radius: 20px; 
+     border-bottom-right-radius: 20px;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.icon-container {
+    position: relative;
+    margin-bottom: 10px;
+  }
+  
+  .icon-text {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 10px);
+    transform: translateY(-50%);
+    opacity: 0;
+    color: white;
+    background-color: transparent;
+    padding: 5px; 
+    transition: opacity 0.3s, background-color 0.3s;
+    z-index: 10; 
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .icon-container:hover .icon-text {
+    border-radius: 5px;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.76);
+  }
+
+  @media only screen and (max-width: 768px) {
+  /* Existing styles */
+
+  .navbar-center {
+    /* Existing styles */
+    gap: 1rem; /* Reduce the gap between items in the navbar-center */
+  }
+
+  /* New styles for VertNav */
+  .vert_nav_main_c {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem; /* Adjust the gap between VertNav items */
+  }
+
+  .icon-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Adjust the gap between icon and text */
+  }
+
+  .icon-text {
+    color: white;
+    font-size: 14px; /* Adjust the font size */
+    z-index: 10;
+  }
+}
