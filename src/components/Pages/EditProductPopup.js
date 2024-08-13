@@ -35,7 +35,7 @@ function EditProductPopup({ onClose, productData }) {
         const token = localStorage.getItem('token');
         e.preventDefault();
         try {
-            const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/edit/?id=${productData.id}`, {
+            const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?id=${productData.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +45,6 @@ function EditProductPopup({ onClose, productData }) {
                     product_name: product,
                     product_price: productPrice,
                     product_description: description,
-                    vendor_branch_name: atob(branchName),
                     product_id: sku,
                     stocks_in_hand: parseInt(invent, 10),
                     unit: unit

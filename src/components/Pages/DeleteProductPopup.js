@@ -19,7 +19,7 @@ function DeleteProductPopup({onClose}) {
 
         const token = localStorage.getItem('token');
         const branchName = localStorage.getItem('branch_name');
-        fetch(`${config.apiUrl}/api/swalook/inventory/product/view/?branch_name=${atob(branchName)}`,{
+        fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${atob(branchName)}`,{
           headers:{
             "Authorization": `Token ${token}`,
             "Content-Type": "application/json"
@@ -56,7 +56,7 @@ function DeleteProductPopup({onClose}) {
         const token = localStorage.getItem('token');
         deleteSelectedProducts.forEach(product => {
           try {
-            const response = fetch(`${config.apiUrl}/api/swalook/inventory/product/delete/?id=${product.id}`, {
+            const response = fetch(`${config.apiUrl}/api/swalook/inventory/product/?id=${product.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${token}`,

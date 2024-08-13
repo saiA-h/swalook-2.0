@@ -40,7 +40,7 @@ function Inventory() {
                     throw new Error('Branch name or token is missing.');
                 }
 
-                const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/view/?branch_name=${atob(branchName)}`, {
+                const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${atob(branchName)}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

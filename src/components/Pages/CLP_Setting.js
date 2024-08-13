@@ -8,6 +8,7 @@ import config from '../../config';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
 
 function CLP_Setting() {
   const [fetchedRows, setFetchedRows] = useState([]);
@@ -55,7 +56,7 @@ function CLP_Setting() {
 
   const handleSave = async () => {
     const branchName = localStorage.getItem('branch_name');
-    const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/add/`;
+    const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/`;
 
     setLoading(true);
     
@@ -65,7 +66,7 @@ function CLP_Setting() {
       if (newRows.length > 0) {
         const response = await axios.post(apiEndpoint, {
           json_data: newRows,
-          minimum_amount: threshold,
+          // minimum_amount: threshold,
           branch_name: atob(branchName),
         }, {
           headers: {
@@ -80,11 +81,13 @@ function CLP_Setting() {
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/delete/?id=${id}`;
+    const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/?id=${id}`;
     
     try {
       await axios.delete(apiEndpoint, {
@@ -121,7 +124,7 @@ function CLP_Setting() {
                     <th>Point balance added</th>
                     <th>Expiry (months)</th>
                     <th>Charges</th>
-                    <th>Delete</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -165,6 +168,12 @@ function CLP_Setting() {
                       >
                         {row.charges}
                       </td>
+                      <td>
+                        {
+                          loading ? <CircularProgress size={24} /> :
+                          <SaveIcon onClick={handleSave} style={{ cursor: 'pointer' }} />
+                        }
+                      </td>
                     </tr>
                   ))}
                  
@@ -185,7 +194,7 @@ function CLP_Setting() {
                   placeholder='Enter amount'
                 />
               </div>
-              <button onClick={handleSave} className='save_button'>
+              <button  className='save_button'>
               {loading ? <CircularProgress size={24} /> : 'Save'}
               </button>
             </div>

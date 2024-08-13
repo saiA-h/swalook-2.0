@@ -46,6 +46,8 @@ function ServiceDetails() {
       }, []);
       
 
+      console.log(fetchService);
+      
     const AddtogglePopup = () => {
         setIsAddPopupOpen(!isAddPopupOpen);
     };

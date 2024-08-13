@@ -51,12 +51,52 @@ function GenerateInvoice() {
     const sname = localStorage.getItem('s-name');
 
     const [InvoiceId , setInvoiceId] = useState('');
+    const [inventoryData, setInventoryData] = useState([]);
+    const [pq , setPQ] = useState('');
+    const [product_value, setProductValue] = useState([]);
+    const [productData, setProductData] = useState([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const branchName = localStorage.getItem('branch_name');
+              const token = localStorage.getItem('token');
+
+              if (!branchName || !token) {
+                  throw new Error('Branch name or token is missing.');
+              }
+
+              const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/view/?branch_name=${atob(branchName)}`, {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Token ${token}`
+                  },
+              });
+
+              if (!response.ok) {
+                  throw new Error('Network response was not ok.');
+              }
+
+              const data = await response.json();
+              setInventoryData(data.data.map((product) => ({
+                  key: product.id,
+                  value: product.product_name,
+                  unit: product.unit,
+                  })));
+          } catch (error) {
+              console.error('Error fetching inventory data:', error);
+          }
+      };
+
+      fetchData();
+  }, []);
 
     useEffect(() => {
       const fetchData = async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`${config.apiUrl}/api/swalook/table/services/`, {
+          const response = await fetch(`${config.apiUrl}/api/swalook/table/services`, {
             headers: {
               'Authorization': `Token ${token}`,
               'Content-Type': 'application/json'
@@ -84,6 +124,25 @@ function GenerateInvoice() {
       fetchData();
 
     }, []);
+    
+    const handleProductSelect = (selectedList) => {
+      setProductValue(selectedList);
+      // Initialize productData with the selected products
+      setProductData(selectedList.map(product => ({
+        name: product.value,
+        quantity: '',
+        unit: product.unit
+      })));
+    };
+  
+    const handleProductInputChange = (index, value) => {
+      const updatedProductData = [...productData];
+      updatedProductData[index].quantity = value;
+      setProductData(updatedProductData);
+    };
+  
+    
+    console.log(productData);
     
   
     // const handleServiceSelect = (selectedList) => {
@@ -157,6 +216,9 @@ function GenerateInvoice() {
     }
     , []);
 
+
+    console.log(servicesTableData, "servicesTableData");
+    
 
     const handleGenerateInvoice = () => {
       if(GBselectedServices.length === 0){
@@ -394,6 +456,55 @@ function GenerateInvoice() {
                     </table>
                   </div>
                 )}
+
+                <h3 className='sts'>Select Product</h3>
+                <div className='gb_select-field-cont'>
+                <Multiselect
+                options={inventoryData}
+                showSearch={true}
+                displayValue="value"
+                onSelect={handleProductSelect}
+                onRemove={handleProductSelect}
+                placeholder="Select Services "
+                className="gb_select-field"
+                showCheckbox={true}
+                selectedValues={product_value}
+                />
+                </div>
+
+                {product_value.length > 0 && (
+                  <div className='services-table'>
+                    <table className='services-table-content'>
+                      <thead>
+                        <tr>
+                          <th>Product Name</th>
+                          <th>Quantity</th>
+                          <th>unit</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {product_value.map((product, index) => (
+                <tr key={index}>
+                  <td>{product.value}</td>
+                  <td>
+                    <input
+                      type='number'
+                      className="service-table-field"
+                      placeholder='Enter Quantity in ml/gm'
+                      required
+                      onChange={(e) => handleProductInputChange(index, e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    {product.unit}
+                  </td>
+                </tr>
+              ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
 
                 <div className="gbform-group" style={{marginTop:'10px'}}>
                 <label htmlFor="discount" >Discount:</label>

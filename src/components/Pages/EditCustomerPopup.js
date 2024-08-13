@@ -60,7 +60,7 @@ function EditCustomerPopup({ customer, onClose }) {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${config.apiUrl}/api/swalook/loyality_program/edit/customer/?id=${customer.id}`, {
+      const response = await fetch(`${config.apiUrl}/api/swalook/loyality_program/customer/?id=${customer.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

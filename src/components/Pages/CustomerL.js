@@ -46,13 +46,13 @@ function CustomerL() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${config.apiUrl}/api/swalook/loyality_program/delete/customer/?id=${id}`, {
+            await axios.delete(`${config.apiUrl}/api/swalook/loyality_program/customer/?id=${id}`, {
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`,
                 },
             });
             // Refresh data after deletion
-            const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/view/customer/?branch_name=${atob(bname)}`, {
+            const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${atob(bname)}`, {
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`,
                 },
@@ -69,7 +69,7 @@ function CustomerL() {
     useEffect(() => {
         const fetchCustomerData = async () => {
             try {
-                const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/view/customer/?branch_name=${atob(bname)}`, {
+                const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${atob(bname)}`, {
                     headers: {
                         'Authorization': `Token ${token}`,
                     },
@@ -104,14 +104,14 @@ function CustomerL() {
             </Helmet>
             <Header />
             <div className='cl_main'>
-                <div className='cl_left'>
+                {/* <div className='cl_left'>
                     <img src={Loyal} alt='Customer' className='cl_image'/>
-                </div>
+                </div> */}
                 <div className='cl_right'>
-                    <div className='cl_card cl_add' onClick={handleAddCustomerClick}>
+                    {/* <div className='cl_card cl_add' onClick={handleAddCustomerClick}>
                         <PersonAddIcon style={{ fontSize: "32px" }} className='cl_icon' />
                         <span className='cl_cardText'>Add Customer</span>
-                    </div>
+                    </div> */}
                     {/* <div className='cl_card cl_delete'>
                         <PersonRemoveIcon style={{ fontSize: "32px" }} className='cl_icon' />
                         <span className='cl_cardText'>Delete Customer</span>
@@ -127,6 +127,10 @@ function CustomerL() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
+                    <div className='cl_card cl_add' onClick={handleAddCustomerClick}>
+                        <PersonAddIcon style={{ fontSize: "32px" }} className='cl_icon' />
+                        {/* <span className='cl_cardText'>Add Customer</span> */}
+                    </div>
                 </div>
                 <hr className='cl_divider'/>
                 <div className='cl_table_wrapper'>

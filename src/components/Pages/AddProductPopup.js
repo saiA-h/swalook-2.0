@@ -27,7 +27,7 @@ function AddProductPopup({ onClose }) {
     const token = localStorage.getItem('token');
     e.preventDefault();
     try {
-        const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/add/`, {
+        const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
