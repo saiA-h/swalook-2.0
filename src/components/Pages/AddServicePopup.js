@@ -15,13 +15,14 @@ function AddServicePopup({ onClose }) {
   
   const branchName = localStorage.getItem('branch_name');
   const sname = localStorage.getItem('s-name');
+  const bid = localStorage.getItem('branch_id');
 
   const handleAddService = (e) => {
     e.preventDefault();
     console.log(service , service_price , service_duration);
     const token = localStorage.getItem('token');
    
-    axios.post(`${config.apiUrl}/api/swalook/add/services/`,{
+    axios.post(`${config.apiUrl}/api/swalook/add/services/?branch_name=${bid}`,{
       service: service,
       service_price: service_price,
       service_duration: service_duration

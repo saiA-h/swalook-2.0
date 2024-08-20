@@ -15,12 +15,13 @@ function PersonalInformation() {
   const [p, setP] = useState('');
 
   const no = atob(localStorage.getItem('number'));
+  const bid = localStorage.getItem('branch_id');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${config.apiUrl}/api/swalook/get_current_user/${no}/`, {
+        const response = await axios.get(`${config.apiUrl}/api/swalook/get_current_user/?id=${no}&branch_name=${bid}`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -49,8 +50,8 @@ function PersonalInformation() {
 
   const handleUpdate = async () => {
     try {
-      const res = await axios.post(
-        `https://api.crm.swalook.in/api/swalook/edit/profile/${no}/`,
+      const res = await axios.put(
+        `${config.apiUrl}/api/swalook/edit/profile/?id=${no}`,
         {
           owner_name: on,
           email: e,

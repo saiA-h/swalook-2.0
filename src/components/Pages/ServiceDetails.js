@@ -16,20 +16,23 @@ function ServiceDetails() {
     const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
     const [fetchService, setFetchService] = useState([]);
     const [loading, setLoading] = useState(true);
+    const bid = localStorage.getItem('branch_id');
 
+    console.log(bid);
+    
     useEffect(() => {
         const fetchData = async () => {
           try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${config.apiUrl}/api/swalook/table/services/`, {
+            const response = await axios.get(`${config.apiUrl}/api/swalook/table/services/?branch_name=${bid}`, {
               headers: {
                 'Authorization': `Token ${token}`,
                 'Content-Type': 'application/json'
               }
             });
       
-            console.log(response.data.table_data);
-            setFetchService(response.data.table_data.map((service) => ({
+            console.log(response.data);
+            setFetchService(response.data.data.table_data.map((service) => ({
               id: service.id,
               service: service.service,
               service_duration: service.service_duration,

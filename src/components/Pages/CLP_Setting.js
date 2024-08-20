@@ -15,12 +15,13 @@ function CLP_Setting() {
   const [newRows, setNewRows] = useState([]);
   const [threshold, setThreshold] = useState('');
   const [loading, setLoading] = useState(false);
+  const bid = localStorage.getItem('branch_id');
 
   // Fetch data when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       const branchName = localStorage.getItem('branch_name');
-      const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/view/?branch_name=${atob(branchName)}`;
+      const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/view/?branch_name=${bid}`;
       
 
       try {
@@ -56,7 +57,7 @@ function CLP_Setting() {
 
   const handleSave = async () => {
     const branchName = localStorage.getItem('branch_name');
-    const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/`;
+    const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/?branch_name=${bid}`;
 
     setLoading(true);
     
@@ -102,6 +103,54 @@ function CLP_Setting() {
     }
   };
 
+
+
+  const [Minimum , setMinimum] = useState(0);
+
+  useEffect(() => {
+    const fetchAmount = async () => {
+      const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/get_minimum_value/?branch_name=${bid}`;
+      try {
+        const response = await axios.get(apiEndpoint, {
+          headers: {
+            'Authorization': `Token ${localStorage.getItem('token')}`,
+          },
+        });
+        if (response.data.status) {
+          setMinimum(response.data.data);
+          setThreshold(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } 
+    }
+    fetchAmount();
+  }
+  , []);
+  
+const handleThresholdSave = async () => {
+  setLoading(true);
+    const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/get_minimum_value/?branch_name=${bid}`;
+
+    try {
+      const response = await axios.post(apiEndpoint, {
+        minimum_amount: threshold,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${localStorage.getItem('token')}`,
+        },
+      });
+
+      console.log('Threshold saved successfully:', response.data);
+    } catch (error) {
+      console.error('Error saving threshold:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <div className='clp_setting_container'>
       <Helmet>
@@ -121,7 +170,7 @@ function CLP_Setting() {
                 <thead>
                   <tr>
                     <th>Membership Type</th>
-                    <th>Point balance added</th>
+                    <th>Point balance added per Rs.100</th>
                     <th>Expiry (months)</th>
                     <th>Charges</th>
                     <th></th>
@@ -194,7 +243,7 @@ function CLP_Setting() {
                   placeholder='Enter amount'
                 />
               </div>
-              <button  className='save_button'>
+              <button  className='save_button'  onClick={handleThresholdSave}>
               {loading ? <CircularProgress size={24} /> : 'Save'}
               </button>
             </div>

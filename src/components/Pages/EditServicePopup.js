@@ -15,6 +15,8 @@ function EditServicePopup({ onClose, serviceData }) {
     console.log(serviceData.id);
     console.log(serviceData.serviceName);
 
+    const bid = localStorage.getItem('branch_id');
+
     // Function to handle saving the edited service
     const handleSaveService = (e) => {
         e.preventDefault();
@@ -28,7 +30,7 @@ function EditServicePopup({ onClose, serviceData }) {
         };
 
         // Perform the POST request
-        axios.post(`${config.apiUrl}/api/swalook/edit/services/${serviceData.id}/`, data, {
+        axios.put(`${config.apiUrl}/api/swalook/edit/services/?branch_name=${bid}&id=${serviceData.id}`, data, {
             headers: {
                 'Authorization': `Token ${token}`,
                 'Content-Type': 'application/json'

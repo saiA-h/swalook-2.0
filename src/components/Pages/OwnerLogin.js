@@ -77,30 +77,31 @@ function OwnerLogin() {
         mobileno: mobileno,
         password: password
       });
-      console.log(response.data);
-      if (response.data.text === 'login successfull !') {
+      console.log(response.data.error.message);
+      if (response.data.error.message === 'login successfull !') {
         Cookies.set('loggedIn', 'true', { expires: 10 });
-        Cookies.set('type', response.data.type, { expires: 10 });
-        const salonName = response.data.salon_name;
+        Cookies.set('type', response.data.data.type, { expires: 10 });
+        const salonName = response.data.data.salon_name;
         Cookies.set('salonName', salonName, { expires: 10 });
-        Cookies.set('branch_n', response.data.branch_name, { expires: 10 });
-        localStorage.setItem('branch_name', btoa(response.data.branch_name));
+        Cookies.set('branch_n', response.data.data.branch_name, { expires: 10 });
+        localStorage.setItem('branch_name', btoa(response.data.data.branch_name));
         localStorage.setItem('s-name', salonName);
-        localStorage.setItem('type', response.data.type);
-        if(response.data.type === 'owner'){
+        localStorage.setItem('type', response.data.data.type);
+        if(response.data.data.type === 'owner'){
           navigate(`/${salonName}`);
         }
-        else if(response.data.type === 'admin'){
+        else if(response.data.data.type === 'admin'){
           navigate(`/${response.data.salon_name}/${btoa(response.data.branch_name)}/dashboard`);
         }
-        else if(response.data.type === 'staff'){
+        else if(response.data.data.type === 'staff'){
           navigate(`/${response.data.salon_name}/${btoa(response.data.branch_name)}/dashboard`);
         }
-      const token = response.data.token;
-      const number = btoa(response.data.user);
+      const token = response.data.data.token;
+      const number = btoa(response.data.data.user);
       localStorage.setItem('token', token);
       localStorage.setItem('number', number);
-      console.log(response.data);
+      const bid = response.data.data.branch_id;
+      localStorage.setItem('branch_id', bid);
     } 
   } catch (error) {
     console.log(error);

@@ -271,7 +271,7 @@ function BusinessAnalysis() {
                                 style={{ width: '80%', height: 'auto', margin: 'auto' }}
                             />
                         ) : (
-                            <p className='ba_p'>Select Analysis you want to see</p>
+                            <p className='ba_p'>No data to display</p>
                         )}
                     </div>
                 </div>

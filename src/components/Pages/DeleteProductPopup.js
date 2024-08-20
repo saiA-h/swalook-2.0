@@ -15,11 +15,13 @@ function DeleteProductPopup({onClose}) {
     const [dialogTitle, setDialogTitle] = useState(''); // State for dialog title
     const [dialogMessage, setDialogMessage] = useState(''); // State for dialog message
 
+    const bid = localStorage.getItem('branch_id');
+
     useEffect(() => {
 
         const token = localStorage.getItem('token');
         const branchName = localStorage.getItem('branch_name');
-        fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${atob(branchName)}`,{
+        fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${bid}`,{
           headers:{
             "Authorization": `Token ${token}`,
             "Content-Type": "application/json"

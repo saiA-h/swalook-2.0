@@ -10,9 +10,11 @@ function DeleteServicePopup({onClose}) {
   const [showPopup, setShowPopup] = useState(false); 
   const [popupMessage, setPopupMessage] = useState('');
 
+  const bid = localStorage.getItem('branch_id');
+
   useEffect(() => {
     const token = localStorage.getItem('token');
-    fetch(`${config.apiUrl}/api/swalook/table/services/`,{
+    fetch(`${config.apiUrl}/api/swalook/table/services/?branch_name=${bid}`,{
       headers:{
         'Authorization': `Token ${token}`,
         'Content-Type': 'application/json'
@@ -23,7 +25,7 @@ function DeleteServicePopup({onClose}) {
     })
     .then((data)=>{
       console.log(data.table_data);
-      setServiceOptions(data.table_data.map((service) => {
+      setServiceOptions(data.data.table_data.map((service) => {
         return {id: service.id, value: service.service}
       }));
     })
@@ -47,7 +49,7 @@ function DeleteServicePopup({onClose}) {
     const token = localStorage.getItem('token');
     deleteSelectedServices.forEach(service => {
       console.log(`Deleting service with ID ${service.id}.`);
-      axios.get(`${config.apiUrl}/api/swalook/delete/services/${service.id}/`, {
+      axios.delete(`${config.apiUrl}/api/swalook/delete/services/?id=${service.id}`, {
         headers: {
           'Authorization': `Token ${token}`,
           'Content-Type': 'application/json'

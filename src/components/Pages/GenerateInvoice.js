@@ -29,7 +29,7 @@ function GenerateInvoice() {
    const [serviceOptions, setServiceOptions] = useState([]);
    const [customer_name , setCustomerName] = useState('');
    const [email , setEmail] = useState('');
-   const [mobile_no , setMobileNo] = useState('');
+   const [mobile_no , setMobileNo] = useState(0);
    const [address , setAddress] = useState('');
     const [GBselectedServices, GBsetSelectedServices] = useState([]);
     const [value , selectedValues] = useState([]);
@@ -56,6 +56,7 @@ function GenerateInvoice() {
     const [product_value, setProductValue] = useState([]);
     const [productData, setProductData] = useState([]);
 
+
     useEffect(() => {
       const fetchData = async () => {
           try {
@@ -66,7 +67,7 @@ function GenerateInvoice() {
                   throw new Error('Branch name or token is missing.');
               }
 
-              const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/view/?branch_name=${atob(branchName)}`, {
+              const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${atob(branchName)}`, {
                   method: 'GET',
                   headers: {
                       'Content-Type': 'application/json',
@@ -135,6 +136,8 @@ function GenerateInvoice() {
       })));
     };
   
+    console.log(productData , "productData");
+    
     const handleProductInputChange = (index, value) => {
       const updatedProductData = [...productData];
       updatedProductData[index].quantity = value;
@@ -355,6 +358,36 @@ function GenerateInvoice() {
     }
   };
 
+  const [membershipStatus, setMembershipStatus] = useState(false);
+  const [membershipType, setMembershipType] = useState('');
+  const [userPoints, setUserPoints] = useState('');
+
+  const handlePhoneBlur = async () => {
+    if (mobile_no) {
+      console.log('Checking membership status...', mobile_no);
+      
+      try {
+        const branchName = localStorage.getItem('branch_name');
+        const response = await axios.get(`http://swallook.pythonanywhere.com/api/swalook/loyality_program/verify/?branch_name=${atob(branchName)}&customer_mobile_no=${mobile_no}`,{
+          headers: {
+            'Authorization': `Token ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.data.status) {
+          setMembershipStatus(true);
+          setMembershipType(response.data.membership_type);
+          setUserPoints(response.data.points);
+        } else {
+          setMembershipStatus(false);
+          setMembershipType('');
+        }
+      } catch (error) {
+        console.error('Error checking membership status:', error);
+      }
+    }
+  };
 
   return (
     <div className='gb_dash_main'>
@@ -380,16 +413,38 @@ function GenerateInvoice() {
                 </div>
                 <div className="gbform-group gb-email">
                 <label htmlFor="email">Email:</label>
-                <input type="email" id="email" className="gb_input-field email_gi" placeholder='Enter Email Address' onChange={(e) => setEmail(e.target.value)}/>
+                <input type="email" id="email" className="gb_input-field email_gi" placeholder='Enter Email Address' onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="gbform-group gb-phone">
                 <label htmlFor="phone">Phone:</label>
-                <input type="number" id="phone" className="gb_input-field" placeholder='Enter Mobile Number' required onChange={(e)=>setMobileNo(e.target.value)}/>
+                <input type="number" id="phone" className="gb_input-field" placeholder='Enter Mobile Number' required onBlur={handlePhoneBlur} onChange={(e)=>setMobileNo(e.target.value)}/>
                 </div>
                 <div className="gbform-group add_c">
                 <label htmlFor="address">Address:</label>
                 <input type="text" id="address" className="gb_input-field address_gi" placeholder='Enter Address' rows={3} onChange={(e)=>setAddress(e.target.value)}></input>
                 </div>
+                
+                {membershipStatus && (
+                  <>
+                   <div className='services-table'>
+                   <table className='services-table-content'>
+                     <thead>
+                       <tr>
+                         <th>Membership Type</th>
+                         <th>Points</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <td>{membershipType}</td>
+                         <td>{userPoints}</td>
+                       </tr>
+                     </tbody>
+                   </table>
+                   </div>
+                 </>
+              )}
+
                 <h3 className='sb'>Served By:</h3>
                 <div className='gb_select-field-cont'>
                 <Multiselect
@@ -510,6 +565,14 @@ function GenerateInvoice() {
                 <label htmlFor="discount" >Discount:</label>
                 <input type="number" id="discount" className="gb_input-field" placeholder='Discount (In Rupees)' onChange={(e)=>setDiscount(e.target.value)}/>
                 </div>
+
+                {membershipStatus && (
+                  <div className="gbform-group">
+                    <label htmlFor="points">Points:</label>
+                    <input type="number" id="points" className="gb_input-field" placeholder='Enter Points' onChange={(e) => setUserPoints(e.target.value)} />
+                  </div>
+                )}
+
                 <div className="gbform-group" style={{ marginTop: '10px' }}>
                     <label htmlFor="comments">Comment:</label>
                 <input id="comments" type='text' className="gb_input-field" placeholder='Enter Comments' onChange={(e) => setComments(e.target.value)}></input>

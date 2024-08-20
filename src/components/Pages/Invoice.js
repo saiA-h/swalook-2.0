@@ -82,6 +82,8 @@ function Invoice() {
   const comments = location.state.comments;
   const invoiceId = location.state.InvoiceId;
 
+  console.log(services, "services");
+  
 
   const initialPrices = services.map(service => parseFloat(service.finalPrice));
   const [prices, setPrices] = useState(initialPrices);

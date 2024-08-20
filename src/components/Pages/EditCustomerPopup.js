@@ -33,11 +33,13 @@ function EditCustomerPopup({ customer, onClose }) {
     }
   }, [customer]);
 
+  const bid = localStorage.getItem('branch_id');
+
   useEffect(() => {
     const fetchProgramTypes = async () => {
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/view/?branch_name=${atob(branchName)}`, {
+        const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/view/?branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`
           }
@@ -73,8 +75,7 @@ function EditCustomerPopup({ customer, onClose }) {
           email: email,
           membership: loyaltyProgram,
           points: points,
-          expiry_days: expiryDays,
-          vendor_branch_name: atob(branchName)
+          expiry_days: expiryDays
         }),
       });
 

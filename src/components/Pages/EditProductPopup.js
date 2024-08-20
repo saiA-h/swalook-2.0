@@ -19,6 +19,9 @@ function EditProductPopup({ onClose, productData }) {
     const branchName = localStorage.getItem('branch_name');
     const sname = localStorage.getItem('s-name');
 
+    console.log(unit, 'unit');
+    
+
     useEffect(() => {
         if (productData) {
             setProduct(productData.product_name || '');
@@ -69,6 +72,34 @@ function EditProductPopup({ onClose, productData }) {
             setLoading(false);
         }
     };
+
+    
+const [fetchUnit, setFetchUnit] = useState([]);
+useEffect(() => {
+    const bid = localStorage.getItem('branch_id');
+    const fetchData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${config.apiUrl}/api/swalook/vendor_unit/add/?branch_name=${bid}`, {
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            setFetchUnit(data.data.map((unit) => ({
+                id: unit.id,
+                unit: unit.unit
+            })));
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    fetchData();
+}
+, []);
 
     return (
         <div className="ad_p_popup_overlay">
@@ -140,8 +171,9 @@ function EditProductPopup({ onClose, productData }) {
                             onChange={(e) => setUnit(e.target.value)}
                         >
                             <option value="">Select unit</option>
-                            <option value="ml">ml</option>
-                            <option value="gm">gm</option>
+                            {fetchUnit.map((unit) => (
+                                <option key={unit.id} value={unit.id}>{unit.unit}</option>
+                            ))}
                         </select>
                     </div>
                     <div className="adp4">

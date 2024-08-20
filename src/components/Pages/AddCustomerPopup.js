@@ -22,13 +22,13 @@ function AddCustomerPopup({ onClose }) {
   const sname = localStorage.getItem('s-name');
   const [programTypes, setProgramTypes] = useState([]);
 
-  console.log(atob(branchName));
+  const bid = localStorage.getItem('branch_id');
 
   useEffect(() => {
     const fetchProgramTypes = async () => {
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/view/?branch_name=${atob(branchName)}`, {
+        const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/view/?branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`
           }
@@ -52,9 +52,10 @@ function AddCustomerPopup({ onClose }) {
   const handleSubmit = async (e) => {
     setLoading(true);
     const token = localStorage.getItem('token');
+    const bid = localStorage.getItem('branch_id');
     e.preventDefault();
     try {
-      const response = await fetch(`${config.apiUrl}/api/swalook/loyality_program/add/customer/`, {
+      const response = await fetch(`${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${bid}`, {    
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,8 +65,7 @@ function AddCustomerPopup({ onClose }) {
           name: customerName,
           mobile_no: customerNumber,
           email: email,
-          membership: loyaltyProgram,
-          vendor_branch_name: atob(branchName)
+          membership: loyaltyProgram
         }),
       });
 

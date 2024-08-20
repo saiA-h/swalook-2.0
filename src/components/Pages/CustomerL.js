@@ -43,6 +43,7 @@ function CustomerL() {
 
     const bname = localStorage.getItem('branch_name');
     const token = localStorage.getItem('token');
+    const bid = localStorage.getItem('branch_id');
 
     const handleDelete = async (id) => {
         try {
@@ -52,7 +53,7 @@ function CustomerL() {
                 },
             });
             // Refresh data after deletion
-            const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${atob(bname)}`, {
+            const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${bid}`, {
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`,
                 },
@@ -69,7 +70,7 @@ function CustomerL() {
     useEffect(() => {
         const fetchCustomerData = async () => {
             try {
-                const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${atob(bname)}`, {
+                const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${bid}`, {
                     headers: {
                         'Authorization': `Token ${token}`,
                     },

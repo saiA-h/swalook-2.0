@@ -15,6 +15,8 @@ function Inventory() {
     const [editProductData, setEditProductData] = useState(null);
     const [inventoryData, setInventoryData] = useState([]);
 
+    const bid = localStorage.getItem('branch_id');
+
     const AddtogglePopup = () => {
         setIsAddPopupOpen(!isAddPopupOpen);
     };
@@ -40,7 +42,7 @@ function Inventory() {
                     throw new Error('Branch name or token is missing.');
                 }
 
-                const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${atob(branchName)}`, {
+                const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${bid}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
