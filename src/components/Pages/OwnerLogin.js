@@ -91,10 +91,10 @@ function OwnerLogin() {
           navigate(`/${salonName}`);
         }
         else if(response.data.data.type === 'admin'){
-          navigate(`/${response.data.salon_name}/${btoa(response.data.branch_name)}/dashboard`);
+          navigate(`/${salonName}/${btoa(response.data.branch_name)}/dashboard`);
         }
         else if(response.data.data.type === 'staff'){
-          navigate(`/${response.data.salon_name}/${btoa(response.data.branch_name)}/dashboard`);
+          navigate(`/${salonName}/${btoa(response.data.branch_name)}/dashboard`);
         }
       const token = response.data.data.token;
       const number = btoa(response.data.data.user);

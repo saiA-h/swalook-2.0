@@ -28,7 +28,7 @@ function EditCustomerPopup({ customer, onClose }) {
       setCustomerNumber(customer.mobile_no);
       setEmail(customer.email || ''); // Handle optional email
       setLoyaltyProgram(customer.membership || '');
-      setPoints(customer.points || 0);
+      setPoints(customer.loyality_profile.current_customer_points|| 0);
       setExpiryDays(customer.expiry_days || '');
     }
   }, [customer]);
@@ -57,25 +57,26 @@ function EditCustomerPopup({ customer, onClose }) {
     fetchProgramTypes();
   }, [branchName]);
 
+  console.log(customer.id);
+  
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${config.apiUrl}/api/swalook/loyality_program/customer/?id=${customer.id}`, {
+      const response = await fetch(`${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${bid}&id=${customer.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Token ${token}`
         },
         body: JSON.stringify({
-          id: customer.id,
           name: customerName,
           mobile_no: customerNumber,
           email: email,
           membership: loyaltyProgram,
-          points: points,
-          expiry_days: expiryDays
+          points: points
         }),
       });
 
@@ -161,7 +162,7 @@ function EditCustomerPopup({ customer, onClose }) {
               ))}
             </select>
           </div>
-          {/* <div className="ec_field">
+          <div className="ec_field">
             <label htmlFor="points">Points:</label>
             <input 
               type="number" 
@@ -172,7 +173,7 @@ function EditCustomerPopup({ customer, onClose }) {
               onChange={(e) => setPoints(e.target.value)}
             />
           </div>
-          <div className="ec_field">
+          {/* <div className="ec_field">
             <label htmlFor="expiry_days">Expiry Days:</label>
             <input 
               type="number" 

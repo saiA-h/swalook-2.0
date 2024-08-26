@@ -45,15 +45,20 @@ function Appointment() {
   const [dialogTitle, setDialogTitle] = useState(''); // State for dialog title
   const [dialogMessage, setDialogMessage] = useState(''); // State for dialog message
 
+  const bid = localStorage.getItem('branch_id');
+  console.log(`Branch ID: ${bid}`);
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${config.apiUrl}/api/swalook/table/services/`, {
+        const response = await fetch(`${config.apiUrl}/api/swalook/table/services/?branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'
-          }
+          },
+          method: 'GET'
         });
   
         if (!response.ok) {
@@ -61,10 +66,10 @@ function Appointment() {
         }
   
         const data = await response.json();
-        console.log(data.table_data);
+       
   
-        setServiceOptions(data.table_data.map((service) => ({
-          key: service.id,  // Assuming `id` is the unique identifier for each service
+        setServiceOptions(data.data.table_data.map((service) => ({
+          key: service.id, 
           value: service.service
         })));
       } catch (error) {
@@ -162,7 +167,7 @@ function Appointment() {
     const token = localStorage.getItem('token');
   
     try {
-      const response = await axios.post(`${config.apiUrl}/api/swalook/appointment/${bname}/`, {
+      const response = await axios.post(`${config.apiUrl}/api/swalook/appointment/?branch_name=${bid}`, {
         customer_name: customer_name,
         mobile_no: mobile_no,
         email: email,
@@ -205,7 +210,7 @@ function Appointment() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${config.apiUrl}/api/swalook/preset-day-appointment/`, {
+        const response = await axios.get(`${config.apiUrl}/api/swalook/preset-day-appointment/?branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'
@@ -231,7 +236,7 @@ function Appointment() {
   const handleDeleteAppoint = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get(`${config.apiUrl}/api/swalook/delete/appointment/${id}/`, {
+      const res = await axios.delete(`${config.apiUrl}/api/swalook/delete/appointment/?id=${id}&branch_name=${bid}`, {
         headers: {
           'Authorization': `Token ${token}`,
           'Content-Type': 'application/json'

@@ -24,19 +24,21 @@ function EditAppointment({ onClose, appointmentId, appointmentName, appointmentP
     const [services, setServices] = useState([]);
     const [serviceOptions, setServiceOptions] = useState([]);
 
+    const bid = localStorage.getItem('branch_id');
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem('token');
                 
-                const servicesResponse = await fetch(`${config.apiUrl}/api/swalook/table/services/`, {
+                const servicesResponse = await fetch(`${config.apiUrl}/api/swalook/table/services/?branch_name=${bid}`, {
                     headers: {
                         'Authorization': `Token ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
                 const servicesData = await servicesResponse.json();
-                setServiceOptions(servicesData.table_data.map((service) => {
+                setServiceOptions(servicesData.data.table_data.map((service) => {
                     return { value: service.service }
                 }));
 

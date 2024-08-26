@@ -36,11 +36,14 @@ function AdminDashboard() {
   const sname = localStorage.getItem('s-name');
   const userType = localStorage.getItem('type');
 
+  const bid = localStorage.getItem('branch_id');
+  console.log(bid);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${config.apiUrl}/api/swalook/appointment/`, {
+        const response = await axios.get(`${config.apiUrl}/api/swalook/appointment/?branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'
@@ -169,9 +172,11 @@ function AdminDashboard() {
 
   const handleDeleteConfirm = async () => {
     const token = localStorage.getItem('token');
+    console.log(deleteId, deleteType);
+    
     try {
       if (deleteType === 'appointment') {
-        await axios.get(`${config.apiUrl}/api/swalook/delete/appointment/${deleteId}/`, {
+        await axios.delete(`${config.apiUrl}/api/swalook/delete/appointment/?id=${deleteId}&branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'

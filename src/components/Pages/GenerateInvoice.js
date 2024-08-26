@@ -56,6 +56,7 @@ function GenerateInvoice() {
     const [product_value, setProductValue] = useState([]);
     const [productData, setProductData] = useState([]);
 
+    const bid = localStorage.getItem('branch_id');
 
     useEffect(() => {
       const fetchData = async () => {
@@ -67,7 +68,7 @@ function GenerateInvoice() {
                   throw new Error('Branch name or token is missing.');
               }
 
-              const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${atob(branchName)}`, {
+              const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${bid}`, {
                   method: 'GET',
                   headers: {
                       'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ function GenerateInvoice() {
       const fetchData = async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`${config.apiUrl}/api/swalook/table/services`, {
+          const response = await fetch(`${config.apiUrl}/api/swalook/table/services/?branch_name=${bid}`, {
             headers: {
               'Authorization': `Token ${token}`,
               'Content-Type': 'application/json'
@@ -111,7 +112,7 @@ function GenerateInvoice() {
           const data = await response.json();
           console.log(data.table_data);
     
-          setServiceOptions(data.table_data.map((service) => ({
+          setServiceOptions(data.data.table_data.map((service) => ({
             key: service.id,
             value: service.service,
             price: service.service_price,
@@ -368,7 +369,7 @@ function GenerateInvoice() {
       
       try {
         const branchName = localStorage.getItem('branch_name');
-        const response = await axios.get(`http://swallook.pythonanywhere.com/api/swalook/loyality_program/verify/?branch_name=${atob(branchName)}&customer_mobile_no=${mobile_no}`,{
+        const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/verify/?branch_name=${bid}&customer_mobile_no=${mobile_no}`,{
           headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json'

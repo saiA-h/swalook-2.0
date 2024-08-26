@@ -74,32 +74,32 @@ function EditProductPopup({ onClose, productData }) {
     };
 
     
-const [fetchUnit, setFetchUnit] = useState([]);
-useEffect(() => {
-    const bid = localStorage.getItem('branch_id');
-    const fetchData = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${config.apiUrl}/api/swalook/vendor_unit/add/?branch_name=${bid}`, {
-                headers: {
-                    'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
+// const [fetchUnit, setFetchUnit] = useState([]);
+// useEffect(() => {
+//     const bid = localStorage.getItem('branch_id');
+//     const fetchData = async () => {
+//         try {
+//             const token = localStorage.getItem('token');
+//             const response = await fetch(`${config.apiUrl}/api/swalook/vendor_unit/add/?branch_name=${bid}`, {
+//                 headers: {
+//                     'Authorization': `Token ${token}`,
+//                     'Content-Type': 'application/json'
+//                 }
+//             });
 
-            const data = await response.json();
-            setFetchUnit(data.data.map((unit) => ({
-                id: unit.id,
-                unit: unit.unit
-            })));
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+//             const data = await response.json();
+//             setFetchUnit(data.data.map((unit) => ({
+//                 id: unit.id,
+//                 unit: unit.unit
+//             })));
+//         } catch (error) {
+//             console.error('Error fetching data:', error);
+//         }
+//     };
 
-    fetchData();
-}
-, []);
+//     fetchData();
+// }
+// , []);
 
     return (
         <div className="ad_p_popup_overlay">
@@ -171,9 +171,8 @@ useEffect(() => {
                             onChange={(e) => setUnit(e.target.value)}
                         >
                             <option value="">Select unit</option>
-                            {fetchUnit.map((unit) => (
-                                <option key={unit.id} value={unit.id}>{unit.unit}</option>
-                            ))}
+                            <option value="ml">ml</option>
+                            <option value="gm">gm</option>
                         </select>
                     </div>
                     <div className="adp4">
