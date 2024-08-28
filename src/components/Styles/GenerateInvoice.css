@@ -61,7 +61,7 @@ input::-webkit-inner-spin-button {
 .gb_right {
   margin-top: 20px;
   width: 45%; 
-  height: 90vh;
+  height: auto;
   background-color: white;
   border-radius: 10px; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 

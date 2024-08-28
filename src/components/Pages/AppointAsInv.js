@@ -11,6 +11,8 @@ import { Helmet } from 'react-helmet';
 import config from '../../config';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import CircularProgress from '@mui/material/CircularProgress';
+import CustomDialog from './CustomDialog';
 
 function getCurrentDate() {
   const currentDate = new Date();
@@ -24,6 +26,11 @@ function AppointAsInv() {
   const navigate = useNavigate();
     const currentDate = getCurrentDate();
     const location = useLocation();
+    const bid = localStorage.getItem('branch_id');
+
+    const [dialogOpen, setDialogOpen] = useState(false); // State for dialog visibility
+    const [dialogTitle, setDialogTitle] = useState(''); // State for dialog title
+    const [dialogMessage, setDialogMessage] = useState(''); // State for dialog message
 
     const initialState = location.state || {};
     const initialRowData = initialState.rowData || {};
@@ -40,7 +47,7 @@ function AppointAsInv() {
   const [address, setAddress] = useState(initialRowData.address || '');
   const [GBselectedServices, GBsetSelectedServices] = useState(initialSelectedServices);
   
-  console.log(GBselectedServices, 'GBselectedServices');
+
 
   const [get_branch , setGetBranch] = useState(GBselectedServices)
 //    const [serviceOptions, setServiceOptions] = useState([]);
@@ -56,16 +63,58 @@ function AppointAsInv() {
     const [comments, setComments] = useState('');
     const [servicesTableData, setServicesTableData] = useState([]); 
     const [inputFieldValue, setInputFieldValue] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const branchName = localStorage.getItem('branch_name');
     const sname = localStorage.getItem('s-name');
 
+    const [inventoryData, setInventoryData] = useState([]);
+    const [pq , setPQ] = useState('');
+    const [product_value, setProductValue] = useState([]);
+    const [productData, setProductData] = useState([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const branchName = localStorage.getItem('branch_name');
+              const token = localStorage.getItem('token');
+
+              if (!branchName || !token) {
+                  throw new Error('Branch name or token is missing.');
+              }
+
+              const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${bid}`, {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Token ${token}`
+                  },
+              });
+
+              if (!response.ok) {
+                  throw new Error('Network response was not ok.');
+              }
+
+              const data = await response.json();
+              setInventoryData(data.data.map((product) => ({
+                  key: product.id,
+                  value: product.product_name,
+                  unit: product.unit,
+                  quantity: product.stocks_in_hand
+                  })));
+          } catch (error) {
+              console.error('Error fetching inventory data:', error);
+          }
+      };
+
+      fetchData();
+  }, []);
 
     useEffect(() => {
       const fetchData = async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`${config.apiUrl}/api/swalook/table/services/`, {
+          const response = await fetch(`${config.apiUrl}/api/swalook/table/services/?branch_name=${bid}`, {
             headers: {
               'Authorization': `Token ${token}`,
               'Content-Type': 'application/json'
@@ -79,7 +128,7 @@ function AppointAsInv() {
           const data = await response.json();
           console.log(data.table_data);
     
-          setServiceOptions(data.table_data.map((service) => ({
+          setServiceOptions(data.data.map((service) => ({
             key: service.id,
             value: service.service,
             price: service.service_price
@@ -92,7 +141,25 @@ function AppointAsInv() {
       fetchData();
     }, []);
 
-
+    const handleProductSelect = (selectedList) => {
+      setProductValue(selectedList);
+      console.log(selectedList, "selectedList");
+      
+      // Initialize productData with the selected products
+      setProductData(selectedList.map(product => ({
+        id: product.key,
+        quantity: '',
+        unit: product.unit
+      })));
+    };
+  
+    console.log(productData , "productData");
+    
+    const handleProductInputChange = (index, value) => {
+      const updatedProductData = [...productData];
+      updatedProductData[index].quantity = value;
+      setProductData(updatedProductData);
+    };
     
     const handleServiceSelect = (selectedList) => {
       GBsetSelectedServices(selectedList);
@@ -172,13 +239,53 @@ function AppointAsInv() {
 
     const handleGenerateInvoice = () => {
       if(GBselectedServices.length === 0){
-        alert('Please select services!');
+        setDialogTitle('Error');
+        setDialogMessage('Please select services!');
+        setDialogOpen(true);
+
         return;
       }
 
       if(service_by.length === 0){
-        alert('Please select served by!');
+        setDialogTitle('Error');
+        setDialogMessage('Please select service by!');
+        setDialogOpen(true);
         return;
+      }
+
+      const mobileNoPattern = /^[0-9]{10}$/;
+      if (!mobileNoPattern.test(mobile_no)) {
+        setDialogTitle('Error');
+        setDialogMessage('Please enter a valid mobile number!');
+        setDialogOpen(true);
+        return;
+      }
+
+      for(let i = 0; i < servicesTableData.length; i++){
+        if(servicesTableData[i].inputFieldValue === ''){
+          setDialogTitle('Error');
+          setDialogMessage('Please enter quantity for selected services!');
+          setDialogOpen(true);
+          return;
+        }
+      }
+
+      for (let i = 0; i < servicesTableData.length; i++) {
+        if (servicesTableData[i].gst === '') {
+          setDialogTitle('Error');
+          setDialogMessage('Please select GST for all services!');
+          setDialogOpen(true);
+          return;
+        }
+      }
+
+      for(let i = 0; i < productData.length; i++){
+        if(productData[i].quantity === ''){
+          setDialogTitle('Error');
+          setDialogMessage('Please enter quantity for selected products!');
+          setDialogOpen(true);
+          return;
+        }
       }
 
       
@@ -194,19 +301,22 @@ function AppointAsInv() {
           isGST,
           gst_number,
           comments,
-          InvoiceId
+          InvoiceId,
+          productData,
+          deductedPoints
         }
       }); 
-      console.log(customer_name , email , mobile_no , address , GBselectedServices , service_by , discount , isGST , gst_number);
+     
   };
 
   const [get_persent_day_bill, setGet_persent_day_bill] = useState([]);
+  const [deductedPoints, setDeductedPoints] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${config.apiUrl}/api/swalook/billing/`, {
+        const response = await axios.get(`${config.apiUrl}/api/swalook/billing/?branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'
@@ -232,7 +342,7 @@ function AppointAsInv() {
   const handleDeleteInvoice = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get(`${config.apiUrl}/api/swalook/delete/invoice/${id}/`, {
+      const res = await axios.get(`${config.apiUrl}/api/swalook/delete/invoice/?id=${id}&branch_name=${bid}`, {
         headers: {
           'Authorization': `Token ${token}`,
           'Content-Type': 'application/json'
@@ -256,7 +366,7 @@ function AppointAsInv() {
   const handleDeleteConfirm = async () => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get(`${config.apiUrl}/api/swalook/delete/invoice/${deleteInvoiceId}/`, {
+      const res = await axios.get(`${config.apiUrl}/api/swalook/delete/invoice/?id=${deleteInvoiceId}&branch_name=${bid}`, {
         headers: {
           'Authorization': `Token ${token}`,
           'Content-Type': 'application/json'
@@ -271,8 +381,44 @@ function AppointAsInv() {
     }
   };
 
+  const [membershipStatus, setMembershipStatus] = useState(false);
+  const [membershipType, setMembershipType] = useState('');
+  const [userPoints, setUserPoints] = useState('');
 
-  console.log(serviceOptions, 'serviceOptions');
+
+
+  const handlePhoneBlur = async () => {
+    if (mobile_no) {
+      console.log('Checking membership status...', mobile_no);
+      
+      try {
+        const branchName = localStorage.getItem('branch_name');
+        const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/verify/?branch_name=${bid}&customer_mobile_no=${mobile_no}`,{
+          headers: {
+            'Authorization': `Token ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.data.status) {
+          setMembershipStatus(true);
+          setMembershipType(response.data.membership_type);
+          setUserPoints(response.data.points);
+        } else {
+          setMembershipStatus(false);
+          setMembershipType('');
+        }
+      } catch (error) {
+        console.error('Error checking membership status:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (mobile_no) {
+      handlePhoneBlur();
+    }
+  }, [mobile_no]);
 
   return (
     <div className='gb_dash_main'>
@@ -308,7 +454,26 @@ function AppointAsInv() {
                 <label htmlFor="address">Address:</label>
                 <input type="text" id="address" className="gb_input-field address_gi" placeholder='Enter Address' rows={3} value={address}  onChange={(e)=>setAddress(e.target.value)}></input>
                 </div>
-
+                {membershipStatus && (
+                  <>
+                   <div className='services-table'>
+                   <table className='services-table-content'>
+                     <thead>
+                       <tr>
+                         <th>Membership Type</th>
+                         <th>Points</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <td>{membershipType}</td>
+                         <td>{userPoints}</td>
+                       </tr>
+                     </tbody>
+                   </table>
+                   </div>
+                 </>
+              )}
                 <h3 className='sb'>Served By:</h3>
                 <div className='gb_select-field-cont'>
                     <Multiselect
@@ -381,10 +546,70 @@ function AppointAsInv() {
                   </div>
                 )}
                 
+                <h3 className='sts'>Select Product</h3>
+                <div className='gb_select-field-cont'>
+                <Multiselect
+                options={inventoryData}
+                showSearch={true}
+                displayValue="value"
+                onSelect={handleProductSelect}
+                onRemove={handleProductSelect}
+                placeholder="Select Services "
+                className="gb_select-field"
+                showCheckbox={true}
+                selectedValues={product_value}
+                />
+                </div>
+
+                {product_value.length > 0 && (
+                  <div className='services-table'>
+                    <table className='services-table-content'>
+                      <thead>
+                        <tr>
+                          <th>Product Name</th>
+                          <th>Quantity</th>
+                          <th>unit</th>
+                          <th>Available</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {product_value.map((product, index) => (
+                <tr key={index}>
+                  <td>{product.value}</td>
+                  <td>
+                    <input
+                      type='number'
+                      className="service-table-field"
+                      placeholder='Enter Quantity in ml/gm'
+                      required
+                      onChange={(e) => handleProductInputChange(index, e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    {product.unit}
+                  </td>
+                  <td>
+                    {product.quantity}
+                  </td>
+                </tr>
+              ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
                 <div className="gbform-group" style={{marginTop:'10px'}}>
                 <label htmlFor="discount" >Discount:</label>
                 <input type="number" id="discount" className="gb_input-field" placeholder='Discount (In Rupees)' onChange={(e)=>setDiscount(e.target.value)}/>
                 </div>
+
+                {membershipStatus && (
+                  <div className="gbform-group">
+                    <label htmlFor="points">Points:</label>
+                    <input type="number" id="points" className="gb_input-field" placeholder='Enter Points' onChange={(e) => setDeductedPoints(e.target.value)} />
+                  </div>
+                )}
+
                 <div className="gbform-group" style={{ marginTop: '10px' }}>
                     <label htmlFor="comments">Comment:</label>
                 <input id="comments" type='text' className="gb_input-field" placeholder='Enter Comments' onChange={(e) => setComments(e.target.value)}></input>
@@ -484,6 +709,13 @@ function AppointAsInv() {
           </div>
         </div>
       )}
+
+<CustomDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        title={dialogTitle}
+        message={dialogMessage}
+      />
     </div>
   )
 }

@@ -32,7 +32,7 @@ function ServiceDetails() {
             });
       
             console.log(response.data);
-            setFetchService(response.data.data.table_data.map((service) => ({
+            setFetchService(response.data.data.map((service) => ({
               id: service.id,
               service: service.service,
               service_duration: service.service_duration,

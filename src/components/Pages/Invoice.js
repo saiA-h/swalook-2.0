@@ -1,6 +1,6 @@
 import React, { useEffect, useState , useRef} from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { json, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useReactToPrint } from "react-to-print";
 import '../Styles/Invoice.css';
@@ -21,7 +21,8 @@ function Invoice() {
   const [showPopup, setShowPopup] = useState(false); 
   const [popupMessage, setPopupMessage] = useState('');
   const [loading, setLoading] = useState(false);
- 
+  const bid = localStorage.getItem('branch_id');
+
   // const handlePrint = () => {
   //   const capture = document.querySelector('.invoice_main');
   //   const margin = 10; // Adjust margin size as needed
@@ -81,9 +82,11 @@ function Invoice() {
   const gst_number = location.state.gst_number;
   const comments = location.state.comments;
   const invoiceId = location.state.InvoiceId;
+  const producData = location.state.productData ? location.state.productData : [];
+  // const deductedPoint = location.state.deductedPoints ? location.state.deductedPoints : 0;
 
-  console.log(services, "services");
-  
+  // const deductedPoint = 0;
+  const [deductedPoint, setDeductedPoint] = useState(0);
 
   const initialPrices = services.map(service => parseFloat(service.finalPrice));
   const [prices, setPrices] = useState(initialPrices);
@@ -112,7 +115,7 @@ function Invoice() {
 
   const [invoice , setInvoice] = useState([]);
 
-  const grandTotalInWords = numberToWords(parseFloat(grand_total));
+  const grandTotalInWords = numberToWords(parseFloat(grand_total - deductedPoint));
 
 useEffect(() => {
   // Calculate and set total price
@@ -246,7 +249,40 @@ const handlePriceBlur = (index, value) => {
     setTotalAmts(newTotalAmts);
   }
 
-  const bname = atob(localStorage.getItem('branch_name'));
+  const [Minimum , setMinimum] = useState(0);
+
+  useEffect(() => {
+    const fetchAmount = async () => {
+      const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/get_minimum_value/?branch_name=${bid}`;
+      try {
+        const response = await axios.get(apiEndpoint, {
+          headers: {
+            'Authorization': `Token ${localStorage.getItem('token')}`,
+          },
+        });
+        if (response.data.status) {
+          setMinimum(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } 
+    }
+    fetchAmount();
+  }
+  , []);
+
+  useEffect(() => {
+    if (grand_total > Minimum) {
+      setDeductedPoint(location.state.deductedPoints || 0);
+    } else {
+      setDeductedPoint(0);
+    }
+  }, [grand_total, Minimum]);
+
+
+  const bname = atob(localStorage.getItem('branch_name'));  
+
+  const final_price = grand_total - deductedPoint;
 
   const handleGenerateInvoice = async (e) => {
     setLoading(true); 
@@ -279,19 +315,20 @@ const handlePriceBlur = (index, value) => {
       total_quantity: total_quantity,
       total_discount: total_discount,
       total_tax: total_tax,
-      grand_total: grand_total,
+      grand_total: final_price,
       total_cgst: total_cgst,
       total_sgst: total_sgst,
       gst_number: gst_number,
-      vendor_branch_name: bname,
       comment: comments,
       slno: invoiceId,
+      json_data: producData,
+      loyalty_points_deducted: deductedPoint
     };
-    console.log(data);
+
   
     try {
       // Make the POST request
-      const response = await axios.post(`${config.apiUrl}/api/swalook/billing/`, data, {
+      const response = await axios.post(`${config.apiUrl}/api/swalook/billing/?branch_name=${bid}`, data, {
         headers: {
           'Authorization': `Token ${token}`,
           'Content-Type': 'application/json'
@@ -473,17 +510,17 @@ const handlePrint = async () => {
     formData.append('vendor_branch_name', bname);
     formData.append('invoice', getInvoiceId);
 
-    try {
-      await axios.post(`${config.apiUrl}/api/swalook/save-pdf/`, formData, {
-        headers: {
-          'Authorization': `Token ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      console.log('PDF saved successfully.');
-    } catch (error) {
-      console.error('Error saving PDF:', error);
-    }
+    // try {
+    //   await axios.post(`${config.apiUrl}/api/swalook/save-pdf/`, formData, {
+    //     headers: {
+    //       'Authorization': `Token ${token}`,
+    //       'Content-Type': 'multipart/form-data'
+    //     }
+    //   });
+    //   console.log('PDF saved successfully.');
+    // } catch (error) {
+    //   console.error('Error saving PDF:', error);
+    // }
   });
 };
 
@@ -618,7 +655,18 @@ const handleSendInovice = async(formData) => {
                   </>
                 ) : null
                 }
-                <th style={{ width: '10%', padding: '0.7%', backgroundColor: '#0d6efd', color: 'white' }}>{grand_total}</th>
+                {/* <th style={{ width: '10%', padding: '0.7%', backgroundColor: '#0d6efd', color: 'white' }}>{grand_total}</th> */}
+                <th style={{ width: '10%', padding: '0.7%', backgroundColor: '#0d6efd', color: 'white' }}>
+  {/* {deductedPoint > 0 ? ( */}
+    <>
+      <small style={{ color: 'white' }}>Loyality Points used: {deductedPoint}</small> <br />
+      Total: {grand_total - deductedPoint} 
+    </>
+  {/* ) : (
+    grand_total
+  )} */}
+</th>
+
               </tr>
             </tbody>
           </table>
@@ -637,7 +685,7 @@ const handleSendInovice = async(formData) => {
           </div>
           <div className='invoice_footer_right'>
             <h4>FINAL VALUE:</h4>
-            <p>Rs {grand_total}</p>
+            <p>Rs {grand_total - deductedPoint}</p>
           </div>
         </div>
         </div>

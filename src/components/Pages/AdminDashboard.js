@@ -80,7 +80,7 @@ function AdminDashboard() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${config.apiUrl}/api/swalook/billing/`, {
+        const response = await axios.get(`${config.apiUrl}/api/swalook/billing/?branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'
@@ -183,7 +183,7 @@ function AdminDashboard() {
           }
         });
       } else if (deleteType === 'invoice') {
-        await axios.get(`${config.apiUrl}/api/swalook/delete/invoice/${deleteId}/`, {
+        await axios.delete(`${config.apiUrl}/api/swalook/delete/invoice/?id=${deleteId}&branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'

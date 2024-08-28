@@ -85,10 +85,12 @@ function GenerateInvoice() {
                   key: product.id,
                   value: product.product_name,
                   unit: product.unit,
+                  quantity: product.stocks_in_hand
                   })));
           } catch (error) {
               console.error('Error fetching inventory data:', error);
           }
+
       };
 
       fetchData();
@@ -112,7 +114,7 @@ function GenerateInvoice() {
           const data = await response.json();
           console.log(data.table_data);
     
-          setServiceOptions(data.data.table_data.map((service) => ({
+          setServiceOptions(data.data.map((service) => ({
             key: service.id,
             value: service.service,
             price: service.service_price,
@@ -129,9 +131,11 @@ function GenerateInvoice() {
     
     const handleProductSelect = (selectedList) => {
       setProductValue(selectedList);
+      console.log(selectedList, "selectedList");
+      
       // Initialize productData with the selected products
       setProductData(selectedList.map(product => ({
-        name: product.value,
+        id: product.key,
         quantity: '',
         unit: product.unit
       })));
@@ -202,6 +206,7 @@ function GenerateInvoice() {
         setIsGST(true);
     }
 
+    const [deductedPoints, setDeductedPoints] = useState('');
     
     useEffect(() => {
       axios.get(`${config.apiUrl}/api/swalook/get_specific_slno/`, {
@@ -268,6 +273,15 @@ function GenerateInvoice() {
         }
       }
 
+      for(let i = 0; i < productData.length; i++){
+        if(productData[i].quantity === ''){
+          setDialogTitle('Error');
+          setDialogMessage('Please enter quantity for selected products!');
+          setDialogOpen(true);
+          return;
+        }
+      }
+
       navigate(`/${sname}/${branchName}/${InvoiceId}/invoice`,{
         state: {
           customer_name,
@@ -280,10 +294,11 @@ function GenerateInvoice() {
           isGST,
           gst_number,
           comments,
-          InvoiceId
+          InvoiceId,
+          productData,
+          deductedPoints
         }
       }); 
-      console.log(customer_name , email , mobile_no , address , GBselectedServices , service_by , discount , isGST , gst_number);
   };
 
   const [get_persent_day_bill, setGet_persent_day_bill] = useState([]);
@@ -292,7 +307,7 @@ function GenerateInvoice() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${config.apiUrl}/api/swalook/billing/`, {
+        const response = await axios.get(`${config.apiUrl}/api/swalook/billing/?branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'
@@ -344,7 +359,7 @@ function GenerateInvoice() {
   const handleDeleteConfirm = async () => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get(`${config.apiUrl}/api/swalook/delete/invoice/${deleteInvoiceId}/`, {
+      const res = await axios.delete(`${config.apiUrl}/api/swalook/delete/invoice/?id=${deleteInvoiceId}&branch_name=${bid}`, {
         headers: {
           'Authorization': `Token ${token}`,
           'Content-Type': 'application/json'
@@ -362,6 +377,8 @@ function GenerateInvoice() {
   const [membershipStatus, setMembershipStatus] = useState(false);
   const [membershipType, setMembershipType] = useState('');
   const [userPoints, setUserPoints] = useState('');
+
+
 
   const handlePhoneBlur = async () => {
     if (mobile_no) {
@@ -536,6 +553,7 @@ function GenerateInvoice() {
                           <th>Product Name</th>
                           <th>Quantity</th>
                           <th>unit</th>
+                          <th>Available</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -554,6 +572,9 @@ function GenerateInvoice() {
                   <td>
                     {product.unit}
                   </td>
+                  <td>
+                    {product.quantity}
+                  </td>
                 </tr>
               ))}
                       </tbody>
@@ -570,7 +591,7 @@ function GenerateInvoice() {
                 {membershipStatus && (
                   <div className="gbform-group">
                     <label htmlFor="points">Points:</label>
-                    <input type="number" id="points" className="gb_input-field" placeholder='Enter Points' onChange={(e) => setUserPoints(e.target.value)} />
+                    <input type="number" id="points" className="gb_input-field" placeholder='Enter Points' onChange={(e) => setDeductedPoints(e.target.value)} />
                   </div>
                 )}
 

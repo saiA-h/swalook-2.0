@@ -10,6 +10,7 @@ import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
 import ScoreOutlinedIcon from '@mui/icons-material/ScoreOutlined';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import QueryStatsOutlinedIcon from '@mui/icons-material/QueryStatsOutlined';
+import config from '../../config';
 
 // import {
 //     Line
@@ -130,11 +131,12 @@ function BusinessAnalysis() {
     //     fetchAnalysisData();
     // }, []);
 
+    const bid = localStorage.getItem('branch_id');
     useEffect(() => {
         const token = localStorage.getItem('token');
         const fetchAnalysisData = async () => {
             try {
-                const response = await axios.get('https://api.crm.swalook.in/api/swalook/analysis/month/business/_01/', {
+                const response = await axios.get(`${config.apiUrl}/api/swalook/analysis/month/business/_01/??branch_name=${bid}`, {
                     headers: {
                         Authorization: `Token ${token}`
                     }

@@ -68,7 +68,7 @@ function Appointment() {
         const data = await response.json();
        
   
-        setServiceOptions(data.data.table_data.map((service) => ({
+        setServiceOptions(data.data.map((service) => ({
           key: service.id, 
           value: service.service
         })));

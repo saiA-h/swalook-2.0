@@ -14,12 +14,13 @@ function ViewInvoice() {
   const [saloon_name, setSaloonName] = useState('');
   const [invoiceData, setInvoiceData] = useState({});
   const invoiceRef = useRef(null);
+  const bid = localStorage.getItem('branch_id');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${config.apiUrl}/api/swalook/get_bill_data/${id}/`, {
+        const response = await axios.get(`${config.apiUrl}/api/swalook/get_bill_data/?id=${id}&branch_name=${bid}`, {
           headers: {
             'Authorization': `Token ${token}`
           }
@@ -175,7 +176,13 @@ function ViewInvoice() {
                     {showCGST && <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{invoiceData.total_tax}</th>}
                     {showCGST && <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{invoiceData.total_cgst}</th>}
                     {showSGST && <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{invoiceData.total_sgst}</th>}
-                    <th style={{ width: '10%', padding: '0.7%', backgroundColor: '#0d6efd', color: 'white' }}>{invoiceData.grand_total}</th>
+                    {/* <th style={{ width: '10%', padding: '0.7%', backgroundColor: '#0d6efd', color: 'white' }}>{invoiceData.grand_total}</th> */}
+                    <th style={{ width: '10%', padding: '0.7%', backgroundColor: '#0d6efd', color: 'white' }}>
+                      <>
+                      <small style={{ color: 'white' }}>Loyality Points used: {invoiceData.loyalty_points_deducted}</small> <br />
+                      Total: {invoiceData.grand_total} 
+                      </>
+                    </th>
                   </tr>
                 </tbody>
               </table>
