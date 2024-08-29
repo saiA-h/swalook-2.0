@@ -136,7 +136,7 @@ function BusinessAnalysis() {
         const token = localStorage.getItem('token');
         const fetchAnalysisData = async () => {
             try {
-                const response = await axios.get(`${config.apiUrl}/api/swalook/analysis/month/business/_01/??branch_name=${bid}`, {
+                const response = await axios.get(`${config.apiUrl}/api/swalook/analysis/month/business/_01/?branch_name=${bid}`, {
                     headers: {
                         Authorization: `Token ${token}`
                     }
