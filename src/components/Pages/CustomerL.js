@@ -12,6 +12,8 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import EditCustomerPopup from './EditCustomerPopup';
+import VertNav from './VertNav';
+import DeleteProductPopup from './DeleteProductPopup';
 
 function CustomerL() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -21,6 +23,10 @@ function CustomerL() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [showPopup, setShowPopup] = useState(false); 
+    // const [selectedProductId, setSelectedProductId] = useState(null);
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null); 
+
 
 
     const handleAddCustomerClick = () => {
@@ -45,28 +51,44 @@ function CustomerL() {
     const token = localStorage.getItem('token');
     const bid = localStorage.getItem('branch_id');
 
-    const handleDelete = async (id) => {
+    const handleDelete = async () => {
         try {
-            await axios.delete(`${config.apiUrl}/api/swalook/loyality_program/customer/?id=${id}`, {
+            await axios.delete(`${config.apiUrl}/api/swalook/loyality_program/customer/?id=${selectedCustomerId}`, {
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`,
                 },
             });
+    
             // Refresh data after deletion
             const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${bid}`, {
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`,
                 },
             });
+    
             if (response.data.status) {
                 setCustomerData(response.data.data);
                 setFilteredData(response.data.data);
             }
+    
+            setShowPopup(false); // Close the popup after deletion
+            setSelectedCustomerId(null); // Reset selected customer ID
+    
         } catch (error) {
             console.error('An error occurred while deleting customer data:', error);
         }
     };
-
+    
+    const handleCancelDelete = () => {
+        setShowPopup(false); // Close the popup without deleting
+        setSelectedCustomerId(null); // Reset selected customer ID
+    };
+    
+    const handleDeleteClick = (id) => {
+        setSelectedCustomerId(id); // Set the selected customer ID for deletion
+        setShowPopup(true); // Show the confirmation popup
+    };
+    
     useEffect(() => {
         const fetchCustomerData = async () => {
             try {
@@ -99,6 +121,7 @@ function CustomerL() {
         
 
     return (
+        
         <div className='cl_container'>
             <Helmet>
                 <title>Customer Loyalty</title>
@@ -119,7 +142,13 @@ function CustomerL() {
                     </div> */}
                 </div>
             </div>
-            <div className='cl_tableContainer'>
+            <div className='update'>
+            <div className='gb_h9'>
+        <div className='gb_ver_nav1'>
+          <VertNav />
+        </div>
+        </div>
+            <div className='cl_tableContainer'>               
                 <div className='cl_headerContainer'>
                     <h2 className='cl_heading'>Customer Details</h2>
                     <input
@@ -134,6 +163,7 @@ function CustomerL() {
                     </div>
                 </div>
                 <hr className='cl_divider'/>
+                
                 <div className='cl_table_wrapper'>
                     <table className='cl_table'>
                         <thead>
@@ -141,10 +171,10 @@ function CustomerL() {
                                 <th style={{ textAlign: "center" }}>S.No</th>
                                 <th style={{ textAlign: "center" }}>Customer Name</th>
                                 <th style={{ textAlign: "center" }}>Customer Number</th>
-                                <th style={{ textAlign: "center" }}>Loyalty Programme</th>
+                                {/* <th style={{ textAlign: "center" }}>Loyalty Programme</th>
                                 <th style={{ textAlign: "center" }}>Points Gathered</th>
-                                <th style={{ textAlign: "center" }}>Days Until Expiry</th>
-                                <th style={{ textAlign: "center" }}>View</th>
+                                <th style={{ textAlign: "center" }}>Days Until Expiry</th> */}
+                                {/* <th style={{ textAlign: "center" }}>View</th> */}
                                 <th style={{ textAlign: "center" }}>Edit</th>
                                 <th style={{ textAlign: "center" }}>Delete</th>
                             </tr>
@@ -160,20 +190,20 @@ function CustomerL() {
                                         <td style={{ textAlign: "center" }}>{index + 1}</td>
                                         <td style={{ textAlign: "center" }}>{customer.name}</td>
                                         <td style={{ textAlign: "center" }}>{customer.mobile_no}</td>
-                                        <td style={{ textAlign: "center" }}>{customer.membership}</td>
+                                        {/* <td style={{ textAlign: "center" }}>{customer.membership}</td>
                                         <td style={{ textAlign: "center" }}>{customer.loyality_profile.current_customer_points}</td>
                                         <td style={{ textAlign: "center" }}>
                                             {customer.loyality_profile.expire_date}
-                                        </td>
-                                        <td style={{ textAlign: "center" }}>
+                                        </td> */}
+                                        {/* <td style={{ textAlign: "center" }}>
                                             <PreviewIcon style={{ cursor: 'pointer' }} />
-                                        </td>
+                                        </td> */}
                                         <td style={{ textAlign: "center" }}>
                                             <EditIcon style={{ cursor: 'pointer' }}  onClick={() => handleEditClick(customer)}
                                             />
                                         </td>
                                         <td style={{ textAlign: "center" }}>
-                                            <DeleteIcon style={{ cursor: 'pointer' }} onClick={() => handleDelete(customer.id)} />
+                                            <DeleteIcon style={{ cursor: 'pointer', color: 'red' }} onClick={() => handleDeleteClick(customer.id)} />
                                         </td>
                                     </tr>
                                 ))
@@ -186,6 +216,7 @@ function CustomerL() {
                     </table>
                 </div>
             </div>
+            </div>
             {isPopupOpen && <AddCustomerPopup onClose={handleClosePopup} />}
             {isEditPopupOpen && (
                 <EditCustomerPopup
@@ -193,6 +224,14 @@ function CustomerL() {
                     onClose={handleEditPopupClose}
                 />
             )}
+            {showPopup && (
+        <DeleteProductPopup
+          title="Delete Product"
+          message="Are you sure you want to delete this customer?"
+          onConfirm={handleDelete} 
+          onCancel={handleCancelDelete} 
+        />
+      )}
         </div>
     );
 }

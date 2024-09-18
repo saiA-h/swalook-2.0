@@ -16,6 +16,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
+import { AiOutlineWhatsApp } from 'react-icons/ai';
+
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -101,6 +103,19 @@ function AdminDashboard() {
   
     fetchData();
   }, []);
+
+  const handleShareOnWhatsApp = (row) => {
+    const message = `Invoice Details:
+  Customer Name: ${row.customer_name}
+  Mobile No: ${row.mobile_no}
+  Total Amount: ${row.grand_total}
+  Date: ${row.date}
+  Services: ${row.services}`;
+  
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+  
   
 
   const handleBillSearchChange = (event) => {
@@ -336,6 +351,7 @@ function AdminDashboard() {
                     <th>Date</th>
                     <th>Services</th>
                     <th>View</th>
+                    <th>Share</th>
                     <th>Delete</th>
                   </tr>
                 </thead>
@@ -387,6 +403,14 @@ function AdminDashboard() {
         />
       </Tooltip>
                          </td>
+                         <td>
+          <Tooltip title="Share on WhatsApp" arrow>
+            <AiOutlineWhatsApp
+              onClick={() => handleShareOnWhatsApp(row)}
+              style={{ cursor: "pointer" , fontSize:"24px" }}
+            />
+          </Tooltip>
+        </td>
                      
                       <td>
                       <Tooltip title="Delete Invoice" arrow>

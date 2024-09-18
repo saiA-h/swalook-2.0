@@ -335,5 +335,40 @@ input::-webkit-inner-spin-button {
 }
 
 
+/* Container for the membership selection */
+.membership-container {
+  width: 100%;
+  max-width: 500px; 
+  /* margin: 0 auto;  */
+  padding: 0 16px;
+  box-sizing: border-box; 
+  margin-top: 15px;
+}
+
+.membership-label {
+  display: block;
+  color: #4a4a4a; 
+  font-weight: 600; 
+  margin-bottom: 8px; 
+}
+
+.membership-select {
+  width: 100%;
+  padding: 8px 12px; 
+  border: 1px solid #d1d5db;
+  border-radius: 4px; 
+  background-color: #fff; 
+  font-size: 16px; 
+  color: #333; 
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+  transition: border-color 0.2s ease; 
+}
+
+.membership-select:focus {
+  border-color: #4a90e2; 
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); 
+}
+
 
 

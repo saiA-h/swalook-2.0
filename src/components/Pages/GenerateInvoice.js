@@ -14,6 +14,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
 import CustomDialog from './CustomDialog';
+import { MailRounded } from '@mui/icons-material';
 
 function getCurrentDate() {
   const currentDate = new Date();
@@ -27,7 +28,7 @@ function GenerateInvoice() {
   const navigate = useNavigate();
     const currentDate = getCurrentDate();
    const [serviceOptions, setServiceOptions] = useState([]);
-   const [customer_name , setCustomerName] = useState('');
+   const [customer_name , setCustomer_Name] = useState('');
    const [email , setEmail] = useState('');
    const [mobile_no , setMobileNo] = useState(0);
    const [address , setAddress] = useState('');
@@ -49,12 +50,21 @@ function GenerateInvoice() {
 
     const branchName = localStorage.getItem('branch_name');
     const sname = localStorage.getItem('s-name');
-
+console.log(sname);
     const [InvoiceId , setInvoiceId] = useState('');
     const [inventoryData, setInventoryData] = useState([]);
     const [pq , setPQ] = useState('');
     const [product_value, setProductValue] = useState([]);
     const [productData, setProductData] = useState([]);
+
+   const [customerName, setCustomerName] = useState('');
+   const [customerNumber, setCustomerNumber] = useState('');
+  //  const [email, setEmail] = useState('');
+   const [loyaltyProgram, setLoyaltyProgram] = useState('');
+   const [points, setPoints] = useState(0);
+   const [expiryDays, setExpiryDays] = useState('');
+   const [showPopup, setShowPopup] = useState(false);
+   const [popupMessage, setPopupMessage] = useState('');
 
     const bid = localStorage.getItem('branch_id');
 
@@ -112,7 +122,7 @@ function GenerateInvoice() {
           }
     
           const data = await response.json();
-          console.log(data.table_data);
+          //console.log(data.table_data);
     
           setServiceOptions(data.data.map((service) => ({
             key: service.id,
@@ -131,7 +141,7 @@ function GenerateInvoice() {
     
     const handleProductSelect = (selectedList) => {
       setProductValue(selectedList);
-      console.log(selectedList, "selectedList");
+      //console.log(selectedList, "selectedList");
       
       // Initialize productData with the selected products
       setProductData(selectedList.map(product => ({
@@ -141,7 +151,7 @@ function GenerateInvoice() {
       })));
     };
   
-    console.log(productData , "productData");
+    //console.log(productData , "productData");
     
     const handleProductInputChange = (index, value) => {
       const updatedProductData = [...productData];
@@ -150,7 +160,7 @@ function GenerateInvoice() {
     };
   
     
-    console.log(productData);
+    //console.log(productData);
     
   
     // const handleServiceSelect = (selectedList) => {
@@ -191,11 +201,51 @@ function GenerateInvoice() {
       setServicesTableData(newTableData);
     };
 
+
+    const branchoption = {
+      'Simply Divine Unisex Beauty Salon': [
+        { key: 'Rajni', value: 'Rajni' },
+        { key: 'Manju', value: 'Manju' },
+        { key: 'Pooja', value: 'Pooja' },
+        { key: 'Seela', value: 'Seela' },
+        { key: 'Minakshi', value: 'Minakshi' },
+        { key: 'Zainab', value: 'Zainab' },
+        { key: 'Manoj', value: 'Manoj' }
+      ],
+      'Simply Divine Salon' : [
+        { key: 'Zishan', value: 'Zishan' },
+        { key: 'Raman', value: 'Raman' },
+        { key: 'Renu', value: 'Renu' },
+        { key: 'Mohan', value: 'Mohan' },
+        { key: 'Sahib', value: 'Sahib' },
+        { key: 'Piyush', value: 'Piyush' },
+        { key: 'Bhim', value: 'Bhim' },
+        { key: 'Nidhi', value: 'Nidhi' },
+        { key:'Tanu ', value: 'Tanu' },
+      ],
+      'test salon':[
+        { key: 'sarthak', value: 'Sarthak' },
+        { key: 'devashish', value:'devashish' },
+      ],
+      'Ads Beauty Salon':[
+        { key: 'Tara Sonar', value: 'Tara Sonar' },
+        { key: 'Moni Das', value: 'Moni Das' },
+        { key: 'Ansh', value: 'Ansh' },
+        { key: 'Imran', value: 'Imran' },
+        { key: 'Bhoirobi Saikia', value: 'Bhoirobi Saikia' },
+        { key: 'Sonali Kumari', value: 'Sonali Kumari' },
+        { key: 'Niki Sonowal', value: 'Niki Sonowal' },
+        { key: 'Junaki Hazorika', value: 'Junaki Hazorika'},
+      ],
+      'AB Unisex Salon': [
+        { key: ' Gobinda Dey', value: 'Gobinda Dey' },
+        { key: 'JATIN BASFOR', value: 'JATIN BASFOR' },
+        { key: 'NEELAM TAMANG', value: 'NEELAM TAMANG' },
+        { key: 'SILPA LAMA ', value: 'SILPA LAMA ' },
+             ]
+    }
     
-    const servedByOptions = [
-      { key: 'John', value: 'John' },
-      { key: 'Ron', value: 'Roh' } ,
-  ];
+    const servedByOptions = [ ...(branchoption[sname] || [])];
 
 
     const handleServedSelect = (selectedList) => {
@@ -216,7 +266,7 @@ function GenerateInvoice() {
         }
       })
         .then(response => {
-          console.log(response.data);
+          //console.log(response.data);
           setInvoiceId(response.data.slno);
         })
         .catch(error => {
@@ -226,24 +276,26 @@ function GenerateInvoice() {
     , []);
 
 
-    console.log(servicesTableData, "servicesTableData");
+    //console.log(servicesTableData, "servicesTableData");
     
 
     const handleGenerateInvoice = () => {
-      if(GBselectedServices.length === 0){
-        setDialogTitle('Error');
-        setDialogMessage('Please select services!');
-        setDialogOpen(true);
 
-        return;
-      }
 
-      if(service_by.length === 0){
-        setDialogTitle('Error');
-        setDialogMessage('Please select service by!');
-        setDialogOpen(true);
-        return;
-      }
+      // if(GBselectedServices.length === 0){
+      //   setDialogTitle('Error');
+      //   setDialogMessage('Please select services!');
+      //   setDialogOpen(true);
+
+      //   return;
+      // }
+
+      // if(service_by.length === 0){
+      //   setDialogTitle('Error');
+      //   setDialogMessage('Please select service by!');
+      //   setDialogOpen(true);
+      //   return;
+      // }
 
       const mobileNoPattern = /^[0-9]{10}$/;
       if (!mobileNoPattern.test(mobile_no)) {
@@ -281,7 +333,6 @@ function GenerateInvoice() {
           return;
         }
       }
-
       navigate(`/${sname}/${branchName}/${InvoiceId}/invoice`,{
         state: {
           customer_name,
@@ -296,10 +347,12 @@ function GenerateInvoice() {
           comments,
           InvoiceId,
           productData,
-          deductedPoints
+          deductedPoints,
+          selectMembership,
         }
       }); 
-  };
+      
+    };
 
   const [get_persent_day_bill, setGet_persent_day_bill] = useState([]);
 
@@ -313,10 +366,8 @@ function GenerateInvoice() {
             'Content-Type': 'application/json'
           }
         });
-  
-        // Assuming res.data.current_user_data is the correct property to set
         setGet_persent_day_bill(response.data.table_data);
-        // console.log(response.data.current_user_data);
+        // //console.log(response.data.current_user_data);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -341,15 +392,20 @@ function GenerateInvoice() {
           'Content-Type': 'application/json'
         }
       });
-      console.log(res.data);
+      //console.log(res.data);
       window.location.reload();
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     }
   };
 
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [deleteInvoiceId, setDeleteInvoiceId] = useState(null);
+
+  
+  const [userExists, setUserExists] = useState(null);
+  const [membershipOptions, setMembershipOptions] = useState(false);
+  const [selectMembership, setSelectMembership] = useState('');
 
   const handleDeleteClick = (id) => {
     setDeleteInvoiceId(id);
@@ -365,10 +421,10 @@ function GenerateInvoice() {
           'Content-Type': 'application/json'
         }
       });
-      console.log(res.data);
+      //console.log(res.data);
       window.location.reload();
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     } finally {
       setShowDeletePopup(false);
     }
@@ -382,30 +438,218 @@ function GenerateInvoice() {
 
   const handlePhoneBlur = async () => {
     if (mobile_no) {
-      console.log('Checking membership status...', mobile_no);
+      //console.log('Checking membership status...', mobile_no);
       
       try {
         const branchName = localStorage.getItem('branch_name');
         const response = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/verify/?branch_name=${bid}&customer_mobile_no=${mobile_no}`,{
           headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           }
         });
-
         if (response.data.status) {
+          // Successful response handling
+          setUserExists(true);
           setMembershipStatus(true);
           setMembershipType(response.data.membership_type);
           setUserPoints(response.data.points);
+          console.log('User exists, membership details:', response.data);
+      
+  
+          // Fetch additional user details
+          const userDetailsResponse = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/customer/get_details/?branch_name=${bid}&mobile_no=${mobile_no}`,{
+            headers: {
+              'Authorization': `Token ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json',
+            }
+          });
+  
+          if (userDetailsResponse.data) {
+            setCustomer_Name(userDetailsResponse.data.data.name);
+            // console.log("customer name", userDetailsResponse.data.data.name );
+            setEmail(userDetailsResponse.data.data.email);
+            // setAddress(userDetailsResponse.data.address);
+            // console.log("user detaial:", userDetailsResponse.data);
+          }
         } else {
+          // Handle case where user does not exist
+          setUserExists(false);
+          console.log();
           setMembershipStatus(false);
           setMembershipType('');
+          await fetchMembershipOptions(); // Ensure this is awaited if it returns a promise
+          console.log('User does not exist, fetching membership options...');
         }
+  
       } catch (error) {
         console.error('Error checking membership status:', error);
       }
     }
   };
+
+ 
+
+
+  const handleSubmit = async ()=> {
+    setLoading(true);
+    const token = localStorage.getItem('token');
+    const bid = localStorage.getItem('branch_id');
+    console.log('Selected Membership:', selectMembership);
+    console.log('Posting data:', {
+      name: customer_name,
+      mobile_no: mobile_no,
+      email: email,
+      membership: selectMembership
+    });
+    
+    try {
+      const response = await axios.post(
+        `${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${bid}`,
+        {
+          name: customer_name,
+          mobile_no: mobile_no,
+          email: email,
+          membership: selectMembership
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
+          }
+        }
+      );
+      
+      const result = response.data;
+      console.log('API Response:', result);
+      
+      if (response.status >= 200 && response.status < 300 && result.success) {
+        setPopupMessage('Customer added successfully!');
+        setShowPopup(true);
+        console.log('Customer added successfully!');
+        // onClose();  
+        window.location.reload();
+      } else {
+        setPopupMessage('Failed to add customer.');
+        setShowPopup(true);
+        console.log('Failed to add customer:', result.message || 'No additional information');
+      }
+    } catch (error) {
+      setPopupMessage('An error occurred.');
+      setShowPopup(true);
+      console.error('Error:', error.response ? error.response.data : error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+const handleMembershipChange = async (selectMembership) => {
+  console.log('swalook Membership:', selectMembership);
+  setSelectMembership(selectMembership);
+  if (selectMembership) {
+    // console.log('swalook Membership:', selectMembership);
+    // await handleSubmit(); 
+    setLoading(true);
+    const token = localStorage.getItem('token');
+    const bid = localStorage.getItem('branch_id');
+    console.log('Selected Membership:', selectMembership);
+    console.log('Posting data:', {
+      name: customer_name,
+      mobile_no: mobile_no,
+      email: email,
+      membership: selectMembership
+    });
+    
+    try {
+      const response = await axios.post(
+        `${config.apiUrl}/api/swalook/loyality_program/customer/?branch_name=${bid}`,
+        {
+          name: customer_name,
+          mobile_no: mobile_no,
+          email: email,
+          membership: selectMembership
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
+          }
+        }
+      );
+      
+      const result = response.data;
+      console.log('API Response:', result);
+      
+      if (response.status >= 200 && response.status < 300 && result.success) {
+        setPopupMessage('Customer added successfully!');
+        setShowPopup(true);
+        console.log('Customer added successfully!');
+        // onClose();  
+        window.location.reload();
+      } else {
+        setPopupMessage('Failed to add customer.');
+        setShowPopup(true);
+        console.log('Failed to add customer:', result.message || 'No additional information');
+      }
+    } catch (error) {
+      setPopupMessage('An error occurred.');
+      setShowPopup(true);
+      console.error('Error:', error.response ? error.response.data : error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+const handleMembershipChange = async (selectMembership) => {
+  console.log('swalook Membership:', selectMembership);
+  setSelectMembership(selectMembership);
+  if (selectMembership) {
+    console.log('swalook Membership:', selectMembership);
+    await handleSubmit(); 
+  }
+  }
+};
+
+
+
+  
+
+  const fetchMembershipOptions = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const membershipResponse = await axios.get(`${config.apiUrl}/api/swalook/loyality_program/view/?branch_name=${bid}`, {
+        headers: {
+          'Authorization': `Token ${token}`
+        }
+      });
+      // Check if the response contains data and status is true
+      if (membershipResponse.data.status && Array.isArray(membershipResponse.data.data)) {
+        setMembershipOptions(membershipResponse.data.data);
+      } else {
+        console.error('Unexpected response format or no data:', membershipResponse.data);
+        setMembershipOptions([]); // Ensure to clear options if the format is not as expected
+      }
+    } catch (error) {
+      console.error('Error fetching membership options:', error);
+    }
+  };
+  
+
+  useEffect(() => {
+    if (mobile_no.length === 10) {
+      fetchMembershipOptions();
+    }
+  }, [mobile_no]);
+  
+  // const handleMembershipChange = async(selectedValue) => {
+  //   setSelectMembership(selectedValue);
+  //   if (selectedValue) {
+  //     await handleSubmit();  
+  //   }
+  // };
+
 
   return (
     <div className='gb_dash_main'>
@@ -419,6 +663,7 @@ function GenerateInvoice() {
           <VertNav />
         </div>
         </div>
+        
         <div className='gb_h2'>
             <div className='gb_left'>
                 <h2 className='GI'>Generate Invoice</h2>
@@ -427,11 +672,11 @@ function GenerateInvoice() {
                 <h3 className='cd'>Customer Details</h3>
                 <div className="gbform-group gb-name">
                 <label htmlFor="name">Name:</label>
-                <input type="text" id="name" className="gb_input-field" placeholder='Enter Full Name' required onChange={(e) => setCustomerName(e.target.value)}/>
+                <input type="text" id="name" className="gb_input-field" placeholder='Enter Full Name' value={customer_name} required onChange={(e) => setCustomer_Name(e.target.value)}/>
                 </div>
                 <div className="gbform-group gb-email">
                 <label htmlFor="email">Email:</label>
-                <input type="email" id="email" className="gb_input-field email_gi" placeholder='Enter Email Address' onChange={(e) => setEmail(e.target.value)} />
+                <input type="email" id="email" className="gb_input-field email_gi" placeholder='Enter Email Address'  value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="gbform-group gb-phone">
                 <label htmlFor="phone">Phone:</label>
@@ -439,10 +684,72 @@ function GenerateInvoice() {
                 </div>
                 <div className="gbform-group add_c">
                 <label htmlFor="address">Address:</label>
-                <input type="text" id="address" className="gb_input-field address_gi" placeholder='Enter Address' rows={3} onChange={(e)=>setAddress(e.target.value)}></input>
+                <input type="text" id="address" className="gb_input-field address_gi" placeholder='Enter Address' value={address} rows={3} onChange={(e)=>setAddress(e.target.value)}></input>
                 </div>
+                {userExists && membershipType !== 'None'  ? (
+  <div className='services-table'>
+    <table className='services-table-content'>
+      <thead>
+        <tr>
+          <th>Membership Type</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{membershipType}</td>
+          <td>{userPoints}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+)  :(mobile_no.length === 10 || mobile_no.length === 12 ? (
+    <div className="membership-container">
+            <label className="membership-label" htmlFor="membership">Select Membership Plan</label>
+            <select
+              id="membership"
+              value={selectMembership}
+              onChange={(e) => handleMembershipChange(e.target.value)}
+              className="membership-select"
+            >
+              <option value="">Select a plan</option>
+              {membershipOptions.length > 0 ? (
+                membershipOptions.map((option) => (
+                  <option key={option.program_type} value={option.program_type}>
+                    {option.program_type}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>No membership options available</option>
+              )}
+            </select>
+          </div>
+) : null )}
+
+
+  
+
+
+                {/* {!userExists && membershipOptions.length > 0 && (  
+      <div className="membership-container">
+        <label className="membership-label" htmlFor="membership">Select Membership Plan</label>
+        <select
+          id="membership"
+          value={selectMembership}
+          onChange={(e) => handleMembershipChange(e.target.value)}
+          className="membership-select"
+        >
+          <option value="">Select a plan</option>
+          {membershipOptions.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    )} */}
                 
-                {membershipStatus && (
+                {/* {membershipStatus && (
                   <>
                    <div className='services-table'>
                    <table className='services-table-content'>
@@ -461,7 +768,7 @@ function GenerateInvoice() {
                    </table>
                    </div>
                  </>
-              )}
+              )} */}
 
                 <h3 className='sb'>Served By:</h3>
                 <div className='gb_select-field-cont'>
@@ -475,6 +782,33 @@ function GenerateInvoice() {
                 className="gb_select-field"
                 />
                 </div>
+          
+                {/* {userExists && mobile_no.length === 10 && (
+      <div className="membership-container">
+        <label className="membership-label" htmlFor="membership">
+          Upgrade Membership Plan
+        </label>
+        <select
+          id="membership"
+          value={selectMembership}
+          onChange={(e) => handleMembershipChange(e.target.value)}
+          className="membership-select"
+        >
+          <option value="">Select a plan</option>
+          {membershipOptions.length > 0 ? (
+            membershipOptions.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.program_type}
+              </option>
+            ))
+          ) : (
+            <option value="" disabled>
+              No membership options available
+            </option>
+          )}
+        </select>
+      </div>
+    )} */}
                 <h3 className='sts'>Select Services</h3>
                 <div className='gb_select-field-cont'>
                 <Multiselect
@@ -538,7 +872,7 @@ function GenerateInvoice() {
                 displayValue="value"
                 onSelect={handleProductSelect}
                 onRemove={handleProductSelect}
-                placeholder="Select Services "
+                placeholder="Select Products "
                 className="gb_select-field"
                 showCheckbox={true}
                 selectedValues={product_value}
@@ -567,6 +901,8 @@ function GenerateInvoice() {
                       placeholder='Enter Quantity in ml/gm'
                       required
                       onChange={(e) => handleProductInputChange(index, e.target.value)}
+                      style={{ borderColor: product.quantity === 0 ? 'red' : 'black' }}
+
                     />
                   </td>
                   <td>
@@ -615,74 +951,77 @@ function GenerateInvoice() {
                 </div>
             </div>
             <div className='gb_right'>
-            <h2 className='gb_appoint'>Billing:</h2>
-            <hr className='gb_hr'/>
-            <div class='gb_table_wrapper'>
-        <table class='gb_table'>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Mobile No.</th>
-                    <th>Amount</th>
-                    <th>Services</th>
-                    <th>View</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-            {loading ? (
-                    <tr>
-                      <td colSpan="6" style={{ textAlign: 'center' }}>
-                        <CircularProgress  sx={{ color: 'black' }} />
-                      </td>
-                    </tr>
-                  ) : (
-                    get_persent_day_bill.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.customer_name}</td>
-                        <td>{item.mobile_no}</td>
-                        <td>{item.grand_total}</td>
-                        <td>
-                          {(() => {
-                            try {
-                              const servicesArray = JSON.parse(item.services);
-                              if (servicesArray.length > 1) {
-                                return (
-                                  <select className='status-dropdown'>
-                                    {servicesArray.map((service, index) => (
-                                      <option key={index} value={service.Description}>{service.Description}</option>
-                                    ))}
-                                  </select>
-                                );
-                              } else if (servicesArray.length === 1) {
-                                return <span>{servicesArray[0].Description}</span>;
-                              } else {
-                                return null;
-                              }
-                            } catch (error) {
-                              console.error('JSON parsing error:', error);
-                              return null;
-                            }
-                          })()}
-                        </td>
-                        <td>
-                          <Tooltip title="View Invoice">
-                            <PictureAsPdfIcon style={{ cursor: "pointer" }} onClick={() => handleShowInvoice(item.id)} />
-                          </Tooltip>
-                        </td>
-                        <td>
-                          <Tooltip title="Delete Invoice">
-                            <DeleteIcon style={{ cursor: "pointer" }} onClick={() => handleDeleteClick(item.id)} />
-                          </Tooltip>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-            </tbody>
-        </table>
-    </div>
-            </div>
+  <h2 className='gb_appoint'>Billing:</h2>
+  <hr className='gb_hr' />
+  <div className='gb_table_wrapper'>
+    <table className='gb_table'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Mobile No.</th>
+          <th>Amount</th>
+          <th>Services</th>
+          <th>View</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {loading ? (
+          <tr>
+            <td colSpan="6" style={{ textAlign: 'center' }}>
+              <CircularProgress sx={{ color: 'black' }} />
+            </td>
+          </tr>
+        ) : (
+          // Ensure get_persent_day_bill is an array and has data
+          (mobile_no === '' ? get_persent_day_bill : get_persent_day_bill.filter(item => item.mobile_no === mobile_no)).map((item, index) => (
+            <tr key={index}>
+              <td>{item.customer_name}</td>
+              <td>{item.mobile_no}</td>
+              <td>{item.grand_total}</td>
+              <td>
+                {(() => {
+                  try {
+                    const servicesArray = JSON.parse(item.services);
+                    if (servicesArray.length > 1) {
+                      return (
+                        <select className='status-dropdown'>
+                          {servicesArray.map((service, index) => (
+                            <option key={index} value={service.Description}>{service.Description}</option>
+                          ))}
+                        </select>
+                      );
+                    } else if (servicesArray.length === 1) {
+                      return <span>{servicesArray[0].Description}</span>;
+                    } else {
+                      return null;
+                    }
+                  } catch (error) {
+                    console.error('JSON parsing error:', error);
+                    return null;
+                  }
+                })()}
+              </td>
+              <td>
+                <Tooltip title="View Invoice">
+                  <PictureAsPdfIcon style={{ cursor: "pointer" }} onClick={() => handleShowInvoice(item.id)} />
+                </Tooltip>
+              </td>
+              <td>
+                <Tooltip title="Delete Invoice">
+                  <DeleteIcon style={{ cursor: "pointer" }} onClick={() => handleDeleteClick(item.id)} />
+                </Tooltip>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
+
         </div>
+
         </div>
 
         {showDeletePopup && (
@@ -709,3 +1048,6 @@ function GenerateInvoice() {
 }
 
 export default GenerateInvoice
+
+
+

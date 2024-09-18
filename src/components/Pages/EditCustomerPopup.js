@@ -75,8 +75,6 @@ function EditCustomerPopup({ customer, onClose }) {
           name: customerName,
           mobile_no: customerNumber,
           email: email,
-          membership: loyaltyProgram,
-          points: points
         }),
       });
 
@@ -145,7 +143,7 @@ function EditCustomerPopup({ customer, onClose }) {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="ec_field">
+          {/* <div className="ec_field">
             <label htmlFor="loyalty_program">Loyalty Program:</label>
             <select
               id="loyalty_program"
@@ -172,7 +170,7 @@ function EditCustomerPopup({ customer, onClose }) {
               value={points}
               onChange={(e) => setPoints(e.target.value)}
             />
-          </div>
+          </div> */}
           {/* <div className="ec_field">
             <label htmlFor="expiry_days">Expiry Days:</label>
             <input 

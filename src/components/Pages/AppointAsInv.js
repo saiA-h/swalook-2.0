@@ -72,6 +72,8 @@ function AppointAsInv() {
     const [pq , setPQ] = useState('');
     const [product_value, setProductValue] = useState([]);
     const [productData, setProductData] = useState([]);
+    
+
 
     useEffect(() => {
       const fetchData = async () => {
@@ -419,6 +421,8 @@ function AppointAsInv() {
       handlePhoneBlur();
     }
   }, [mobile_no]);
+
+  
 
   return (
     <div className='gb_dash_main'>

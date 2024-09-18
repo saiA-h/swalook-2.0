@@ -25,8 +25,10 @@ function ViewInvoice() {
             'Authorization': `Token ${token}`
           }
         });
+        console.log("response", response.data);
+        console.log("data",response.data.current_user_data);
   
-        setInvoiceData(response.data.current_user_data[0]);
+        setInvoiceData(response.data.current_user_data);
         setSaloonName(localStorage.getItem('saloon_name'));
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -99,9 +101,20 @@ function ViewInvoice() {
   // Variables and JSX for rendering invoice details
   const isGST = invoiceData.gst_number ? true : false;
   const grandTotalInWords = numberToWords(parseFloat(invoiceData.grand_total));
+  
+  // Check if `services` and `products` need to be parsed
   const services = invoiceData.services ? JSON.parse(invoiceData.services) : [];
+  // const products = invoiceData.products ? JSON.parse(invoiceData.products) : [];
+  
+  // const membership = typeof invoiceData.vendor_customers_profile === 'string'
+  //   ? JSON.parse(invoiceData.vendor_customers_profile)
+  //   : invoiceData.vendor_customers_profile || {};
+  
   const showCGST = services.some(service => parseFloat(service.CGST) > 0);
   const showSGST = services.some(service => parseFloat(service.SGST) > 0);
+  
+  // console.log("kuchv", membership);
+  
 
   return (
     <div className='invoice_container'>
@@ -161,12 +174,53 @@ function ViewInvoice() {
                       <td style={{ width: '10%', padding: '0.7%' ,textAlign:"center"}} className='text-center'>{item.Quantity}</td>
                       <td style={{ width: '10%', padding: '0.7%',textAlign:"center" }} className='text-center'>{item.Discount}</td>
                       {/* <td style={{ width: '10%', padding: '0.7%' }} className='text-center'>{item.Tax_amt}</td> */}
-                      {showCGST && <td style={{ width: '10%', padding: '0.7%' ,textAlign:"center"}} className='text-center'>{item.Tax_amt}</td>}
-                      {showCGST && <td style={{ width: '10%', padding: '0.7%',textAlign:"center" }} className='text-center'>{item.CGST}</td>}
-                      {showSGST && <td style={{ width: '10%', padding: '0.7%',textAlign:"center" }} className='text-center'>{item.SGST}</td>}
+                      {isGST ? (
+  <>
+    {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>{item.Tax_amt}</td>}
+    {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>{item.CGST}</td>}
+    {showSGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>{item.SGST}</td>}
+  </>
+) : (
+  <>
+  {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>0</td>}
+    {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>0</td>}
+    {showSGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>0</td>}
+    </>
+)
+
+}
+
                       <td style={{ width: '10%', padding: '0.7%',textAlign:"center" }} className='text-center'>{item.Total_amount}</td>
                     </tr>
                   ))}
+                  {/* {products.map((product, index) => (
+        <tr key={index} style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
+          <td style={{ width: '5%', padding: '0.7%', textAlign: "center" }}>P{index + 1}</td>
+          <td style={{ width: '30%', padding: '0.7%', textAlign: "center" }}>{product.name}</td>
+          <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.price}</td>
+          <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.quantity}</td>
+          <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.discount}</td>
+          {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.tax}</td>}
+          {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.cgst}</td>}
+          {showSGST && <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.sgst}</td>}
+          <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.total}</td>
+        </tr>
+      ))} */}
+  {/* {membership && (
+  <tr style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
+      <td scope='col' style={{ textAlign: 'center' }}>{services.length + 1}</td>
+      <td style={{ width: '30%', padding: '0.7%' ,textAlign:"center"}} className='text-center'>{membership.membership}</td>
+      <td style={{ textAlign: 'center' }}>{membership.membershipPrice}</td>
+    <td style={{ textAlign: 'center' }}>1</td>
+    <td style={{ textAlign: 'center' }}>0000</td>
+    {showCGST && <td style={{ textAlign: 'center' }}>{membership.membershipTax}</td>}
+    {showCGST && <td style={{ textAlign: 'center' }}>{membership.CGST}</td>}
+    {showSGST && <td style={{ textAlign: 'center' }}>{membership.SGST}</td>}
+    <td style={{ textAlign: 'center' }}>{membership.membershipTotal}</td>
+  </tr>
+)} */}
+
+
                   <tr style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
                     <th colSpan='2' style={{ width: '20%', color: 'white', fontWeight: 500, fontSize: 15, backgroundColor: '#0d6efd' }}>TOTAL</th>
                     <th style={{ width: '5%', padding: '0.7%' }} className='text-center'>{invoiceData.total_prise}</th>

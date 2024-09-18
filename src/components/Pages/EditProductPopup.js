@@ -34,11 +34,18 @@ function EditProductPopup({ onClose, productData }) {
     }, [productData]);
 
     const handleSubmit = async (e) => {
-        setLoading(true);
-        const token = localStorage.getItem('token');
         e.preventDefault();
+        setLoading(true);
+        if (parseInt(invent, 10) < 0) {
+            setPopupMessage('Quantity cannot be negative.');
+            setShowPopup(true);
+            setLoading(false);
+            return;
+        }
+        
+        const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?id=${productData.id}`, {
+            const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?id=${productData.id}&branch_name=${branchName}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -161,20 +168,21 @@ function EditProductPopup({ onClose, productData }) {
                         />
                     </div>
                     <div className="adp4">
-                        <label htmlFor="unit">Unit:</label>
-                        <select
-                        className='status-dropdown'
-                            id="unit"
-                            name="unit"
-                            required
-                            value={unit}
-                            onChange={(e) => setUnit(e.target.value)}
-                        >
-                            <option value="">Select unit</option>
-                            <option value="ml">ml</option>
-                            <option value="gm">gm</option>
-                        </select>
-                    </div>
+    <label htmlFor="unit">Unit:</label>
+    <select
+        className={`status-dropdown ${unit === "" ? "error" : ""}`}
+        id="unit"
+        name="unit"
+        required
+        value={unit}
+        onChange={(e) => setUnit(e.target.value)}
+    >
+        <option value="">Select unit</option>
+        <option value="ml">ml</option>
+        <option value="gm">gm</option>
+    </select>
+    {unit === "" && <span className="error-message">Unit is required</span>}
+</div>
                     <div className="adp4">
                         <label htmlFor="description">Description:</label>
                         <input

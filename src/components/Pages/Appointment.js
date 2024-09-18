@@ -154,14 +154,15 @@ function Appointment() {
       return;
     }
 
-    const mobileNoPattern = /^[0-9]{10}$/;
-    if(!mobileNoPattern.test(mobile_no)) {
+    const mobileNoPattern = /^(\+91)?[0-9]{10}$/;
+    if (!mobileNoPattern.test(mobile_no)) {
       setDialogTitle('Error');
       setDialogMessage('Please enter a valid mobile number.');
       setDialogOpen(true);
       setBookAppointment(false);
       return;
     }
+    
   
     console.log(customer_name, mobile_no, email, booking_date, booking_time, services);
     const token = localStorage.getItem('token');
@@ -188,7 +189,7 @@ function Appointment() {
         setPopupMessage("Appointment added successfully!"); // Set popup message
         setShowPopup(true);
 
-        const phoneNumber = mobile_no; 
+        const phoneNumber = `+91${mobile_no}`; // Replace with the customer's phone number
         const serviceNames = services.map(service => service.value).join(', '); 
         const message = `Hi ${customer_name}!\nYour appointment is booked and finalised for: ${booking_time} | ${booking_date}\nFor the following services: ${serviceNames}\nSee you soon!\nThanks and Regards\nTeam ${atob(branchName)}`;
         const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;

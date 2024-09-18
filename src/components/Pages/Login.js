@@ -71,7 +71,7 @@ function Login() {
       password: password,
     })
     .then((res) => {
-      if (res.data.text === 'login successfull !') {
+      if (res.data.text === 'login successful!') {
         Cookies.set('loggedIn', 'true', { expires: 10 });
         Cookies.set('type', res.data.type, { expires: 10 });
         Cookies.set('branch_n', res.data.branch_name, { expires: 10 });

@@ -115,3 +115,23 @@ body {
         display: none;
     } */
 }
+
+.gb_h9 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 50vh; /* Full viewport height */
+    padding-right: 0px; /* Optional padding */
+  }
+  
+  .gb_ver_nav2 {
+    height: 80vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the start of the flex container (right side) */
+  }
+  .update{
+    display: flex;
+    flex-direction: row;
+  }
+  

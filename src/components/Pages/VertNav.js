@@ -93,14 +93,14 @@ function VertNav() {
           <CardMembershipIcon
             style={{ fontSize: 27, margin: '5px', color: 'white' }}
           />
-          <span className="icon-text">Customer Loyalty Program</span>
+          <span className="icon-text">Customers</span>
         </Link>
       ) : (
         <>
           <CardMembershipIcon
             style={{ fontSize: 27, margin: '5px',  color: 'white' }}
           />
-          <span className="icon-text">Customer Loyalty Program</span>
+          <span className="icon-text">Customers</span>
         </>
       )}
     </div>

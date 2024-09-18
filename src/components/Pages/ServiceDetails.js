@@ -22,31 +22,34 @@ function ServiceDetails() {
     
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get(`${config.apiUrl}/api/swalook/table/services/?branch_name=${bid}`, {
-              headers: {
-                'Authorization': `Token ${token}`,
-                'Content-Type': 'application/json'
-              }
-            });
-      
-            console.log(response.data);
-            setFetchService(response.data.data.map((service) => ({
-              id: service.id,
-              service: service.service,
-              service_duration: service.service_duration,
-              service_price: service.service_price
-            })));
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          } finally {
-            setLoading(false);
-          }
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`${config.apiUrl}/api/swalook/table/services/?branch_name=${bid}`, {
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+    
+                console.log(response.data);
+                setFetchService(response.data.data.map((service) => ({
+                    id: service.id,
+                    service: service.service,
+                    service_duration: service.service_duration,
+                    service_price: service.service_price
+                })));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
+            }
         };
-      
+    
         fetchData();
-      }, []);
+    }, []);
+    
+      
+;
       
 
       console.log(fetchService);
@@ -59,11 +62,11 @@ function ServiceDetails() {
         setIsDeletePopupOpen(!isDeletePopupOpen);
     };
 
-    const EdittogglePopup = (id, serviceName) => { // Modify EdittogglePopup to accept id and serviceName
+    const EdittogglePopup = (id, serviceName, serviceDuration, servicePrice) => { 
         setIsEditPopupOpen(!isEditPopupOpen);
-        // Pass id and serviceName to EditServicePopup
-        setEditServiceData({ id: id, serviceName: serviceName });
+        setEditServiceData({ id, serviceName, serviceDuration, servicePrice });
     }
+    
 
     const [editServiceData, setEditServiceData] = useState(null); // State variable to store data for editing
 
@@ -105,8 +108,8 @@ function ServiceDetails() {
                                     <td>{ser.service_duration}</td>
                                     <td>{ser.service_price}</td>
                                     {/* <td><button className="edit_service_button" onClick={() => EdittogglePopup(ser.id, ser.service)}>Edit</button></td>  */}
-                                    <td><EditIcon onClick={() => EdittogglePopup(ser.id, ser.service)} style={{ cursor: 'pointer' }} /></td>
-                                </tr>
+                                    <td><EditIcon onClick={() => EdittogglePopup(ser.id, ser.service, ser.service_duration, ser.service_price)} style={{ cursor: 'pointer' }} /></td>
+                                    </tr>
                             ))
                         }
                     </tbody>

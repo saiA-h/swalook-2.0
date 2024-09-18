@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import Popup from './Popup';
 import CircularProgress from '@mui/material/CircularProgress';
+import config from '../../config';
 
 function OwnerLogin() {
   const navigate = useNavigate();
@@ -73,12 +74,12 @@ function OwnerLogin() {
     setLoading(true);
     e.preventDefault();
     try {
-      const response = await axios.post("http://swallook.pythonanywhere.com/api/swalook/centralized/login/", {
+      const response = await axios.post(`${config.apiUrl}/api/swalook/centralized/login/`, {
         mobileno: mobileno,
         password: password
       });
       console.log(response.data.error.message);
-      if (response.data.error.message === 'login successfull !') {
+      if (response.data.error.message === 'login successful!') {
         Cookies.set('loggedIn', 'true', { expires: 10 });
         Cookies.set('type', response.data.data.type, { expires: 10 });
         const salonName = response.data.data.salon_name;

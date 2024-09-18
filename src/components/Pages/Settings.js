@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../Styles/Settings.css'
 import { Link } from 'react-router-dom';
 import Header from './Header'
@@ -6,10 +6,50 @@ import PI from '../../assets/PI.png'
 import HD from '../../assets/HD.png'
 import SY from '../../assets/SY.png'
 import CLP from '../../assets/CLP.png'
+import axios from 'axios';
+import config from '../../config';
 
 function Settings() {
+  const [newRows, setNewRows] = useState([]);
+  
   const branchName = localStorage.getItem('branch_name');
 const sname = localStorage.getItem('s-name');
+const bid = localStorage.getItem('branch_id');
+const handleSave = async () => {
+  const branchName = localStorage.getItem('branch_name');
+  const apiEndpoint = `${config.apiUrl}/api/swalook/loyality_program/?branch_name=${bid}`;
+  const newRows = [
+    {
+      type: 'None',
+      points: '0',
+      expiry: '0',
+      charges: '0',
+    }]
+
+
+  try {
+    if (newRows.length > 0) {
+      const response = await axios.post(apiEndpoint, {
+        json_data: newRows,
+        branch_name: atob(branchName),
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${localStorage.getItem('token')}`,
+        },
+      });
+
+      console.log('Success:', response.data);
+      console.log('Error:', newRows)
+      setNewRows([]); 
+    } else {
+      console.log('No new rows to save.');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
+  }
+};
   return (
     <div className='settings_container'>
         <Header />
@@ -19,7 +59,7 @@ const sname = localStorage.getItem('s-name');
           <h2>Personal Information</h2>
           <p>Manage your account details</p>
         </Link>
-        <Link to={`/${sname}/${branchName}/settings/clpsetting`} className="settings_box">
+        <Link to={`/${sname}/${branchName}/settings/clpsetting`} onClick={handleSave} className="settings_box">
           <img src={CLP} alt="clp" />
           <h2>Customer Loyality</h2>
           <p>Edit your customer loyality settings here</p>

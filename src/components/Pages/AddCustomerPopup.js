@@ -65,7 +65,7 @@ function AddCustomerPopup({ onClose }) {
           name: customerName,
           mobile_no: customerNumber,
           email: email,
-          membership: loyaltyProgram
+          membership: 'None'
         }),
       });
 
@@ -77,7 +77,7 @@ function AddCustomerPopup({ onClose }) {
         setPopupMessage('Customer added successfully!');
         setShowPopup(true);
         onClose();  
-        window.location.reload();
+        // window.location.reload();
       } else {
         setPopupMessage('Failed to add customer.');
         setShowPopup(true);
@@ -89,9 +89,11 @@ function AddCustomerPopup({ onClose }) {
       setLoading(false);
     }
   };
+  console.log("kuch v", loyaltyProgram);
 
   return (
     <div className="ac_popup_overlay">
+       
       <div className="ac_popup_container">
         <div className="ac_popup_header">
           <div className='ac_popup_title'>
@@ -133,7 +135,7 @@ function AddCustomerPopup({ onClose }) {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="ac_field">
+          {/* <div className="ac_field">
             <label htmlFor="loyalty_program">Loyalty Program:</label>
             <select
               id="loyalty_program"
@@ -149,8 +151,8 @@ function AddCustomerPopup({ onClose }) {
                 </option>
               ))}
             </select>
-          </div>
-          <div className="ac_field">
+          </div> */}
+          {/* <div className="ac_field">
             <label htmlFor="points">Points:</label>
             <input 
               type="number" 
@@ -161,7 +163,7 @@ function AddCustomerPopup({ onClose }) {
               value={points}
             //   onChange={(e) => setPoints(e.target.value)}
             />
-          </div>
+          </div> */}
           <div className="ac_button_container">
             <button className="ac_save_button">
               {loading ? <CircularProgress size={20} color="inherit" /> : 'Save'}

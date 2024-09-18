@@ -7,87 +7,100 @@
 body {
   font-family: 'Montserrat', sans-serif;
 }
-
-.DP_overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-    backdrop-filter: blur(5px); /* Apply blur effect */
-    z-index: 999; /* Ensure it's above other elements */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6); /* Slightly darker background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it appears on top of everything */
 }
 
-.DP_container {
-    background-color: white;
-    border: 1px solid #ccc;
-    width: fit-content;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-family: 'Montserrat', sans-serif;
+.confirm-dialog-box {
+  background-color: #fff;
+  width: 90%;
+  max-width: 400px;
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Stronger shadow for emphasis */
+  position: relative;
+  animation: fadeIn 0.3s ease-out; /* Smooth fade-in animation */
 }
 
-.DP_header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+.confirm-dialog-box h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333;
 }
 
-.DPh3 {
-    margin: 0;
-    flex-grow: 2;
+.confirm-dialog-box p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.confirm-dialog-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.confirm-button, .cancel-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 45%;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-button {
+  background-color: #e74c3c; /* Red for delete action */
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #c0392b; /* Darker shade on hover */
+}
+
+.cancel-button {
+  background-color: #3498db; /* Blue for cancel action */
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #2980b9; /* Darker shade on hover */
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: scale(0.9);
   }
-  
-  .close_button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    color: red;
-    margin-left: auto;
+  to {
+      opacity: 1;
+      transform: scale(1);
   }
-  
-  .close_button:hover {
-    color: darkred;
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+  .confirm-dialog-box {
+      padding: 15px 20px;
   }
 
-  .DP_dropdown-container {
-    margin-top: 20px;
-    position: relative;
-    width: 300px; /* Adjust the width as needed */
-  }
-  
-  .DP_select {
-    width: 300px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    appearance: none; /* Remove default arrow */
-    background-color: #fff; /* Dropdown background color */
-    cursor: pointer;
-    font-size: 16px; /* Adjust font size as needed */
+  .confirm-dialog-buttons {
+      flex-direction: column;
+      gap: 10px;
   }
 
-  .delete_button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #091A44;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
+  .confirm-button, .cancel-button {
+      width: 100%;
   }
-  
-  .delete_button:hover {
-    opacity: 0.9;
-  }
-  
-
-  
+}
