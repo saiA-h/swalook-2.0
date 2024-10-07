@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../Styles/Help.css'; 
 import Header from './Header';
 import { Helmet } from 'react-helmet';
+import VertNav from './VertNav';
 
 function Help() {
   const [formData, setFormData] = useState({
@@ -111,6 +112,7 @@ function Help() {
         <title>Help</title>
       </Helmet>
       <Header />
+      <VertNav/>
       <div className="help-container">
         <div className="contact-card">
           <h2 style={{color:"#091A44"}}>Help</h2>

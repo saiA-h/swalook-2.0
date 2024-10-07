@@ -14,7 +14,7 @@ import config from '../../config';
 import { CircularProgress } from '@mui/material';
 import { storage } from '../../utils/firebase';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
+import '../Styles/Invoice.css'
 function Invoice() {
 
   const navigate = useNavigate();
@@ -929,208 +929,154 @@ const handleSendInvoice = async (formData) => {
 //   }
 // };
 
-
-  return (
+return (
+  <div className='invoice_container'>
+    <Helmet>
+      <title>Invoice</title>
+    </Helmet>
     
-    <div className='invoice_container'>
-      <Helmet>
-        <title>Invoice</title>
-      </Helmet>
-      
-      <div  className='invoice_main'>
-        <form onSubmit={handleGenerateInvoice}>
-          <div>
-        <div className='invoice_header'>
-          {/* <img src={Logo1} alt='Logo' className='invoice_logo' /> */}
-          <div className='invoice_name'>{getSaloonName}</div>
-        </div>
-        <div className='invoice_content'>
-          <div className='invoice_left'>
-            <h3><b>Invoice To:</b></h3>
-            <p>{customer_name}</p>
-            <p>{address}</p>
-            <p>{email}</p>
-            <p>{mobile_no}</p>
+    <div className='invoice_main'>
+      <form onSubmit={handleGenerateInvoice}>
+        <div>
+          <div className='invoice_header'>
+            <div className='invoice_name'>{getSaloonName}</div>
           </div>
-          <div className='invoice_right'>
-            <div className='invoice-invoice_id'>
-            <p><b>Invoice Id:</b></p>
-              <p>{getInvoiceId}</p>
+          <div className='invoice_content'>
+            <div className='invoice_left'>
+              <h3><b>Invoice To:</b></h3>
+              <p>{customer_name}</p>
+              <p>{address}</p>
+              <p>{email}</p>
+              <p>{mobile_no}</p>
             </div>
-            <div className='invoice_date'>
-              <p><b>Date of Invoice:</b> </p>
-              <p>{getCurrentDate()}</p>
-            </div>
-            {isGST ? (
-              <div className='invoice_gst'>
-                <p><b>GST Number:</b> {gst_number}</p>
+            <div className='invoice_right'>
+              <div className='invoice-invoice_id'>
+                <p><b>Invoice Id:</b></p>
+                <p>{getInvoiceId}</p>
               </div>
-            ) : null}
+              <div className='invoice_date'>
+                <p><b>Date of Invoice:</b> </p>
+                <p>{getCurrentDate()}</p>
+              </div>
+              {isGST && (
+                <div className='invoice_gst'>
+                  <p><b>GST Number:</b> {gst_number}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className='table-responsive'>
+            <table className='invoice_table'>
+              <thead>
+                <tr>
+                  <th>S. No.</th>
+                  <th>DESCRIPTION</th>
+                  <th>PRICE</th>
+                  <th>QUANTITY</th>
+                  <th>DISCOUNT</th>
+                  {isGST && (
+                    <>
+                      <th>TAX AMT(18%)</th>
+                      <th>CGST(9%)</th>
+                      <th>SGST(9%)</th>
+                    </>
+                  )}
+                  <th>TOTAL AMT</th>
+                </tr>
+              </thead>
+              <tbody>
+                {services.map((service, index) => (
+                  <tr key={index}>
+                    <td style={{ textAlign: 'center' }}>{index + 1}</td>
+                    <td className='text-center'>{service.value}</td>
+                    <td className='text-center'>
+                      <input type='number' className='editable-field' value={prices[index]} readOnly />
+                    </td>
+                    <td className='text-center'>
+                      <input type='number' className='editable-field' value={quantities[index]} readOnly />
+                    </td>
+                    <td className='text-center'>
+                      <input type='number' className='editable-field' defaultValue={discounts[index] || 0} />
+                    </td>
+                    {isGST && (
+                      <>
+                        <td className='text-center'>{taxes[index]}</td>
+                        <td className='text-center'>{cgst[index]}</td>
+                        <td className='text-center'>{sgst[index]}</td>
+                      </>
+                    )}
+                    <td style={{ textAlign: 'center' }}>{totalAmts[index]}</td>
+                  </tr>
+                ))}
+                <tr>
+                  <th colSpan='2'>TOTAL</th>
+                  <th>{total_prise}</th>
+                  <th>{total_quantity}</th>
+                  <th>{total_discount}</th>
+                  {isGST && (
+                    <>
+                      <th>{total_tax}</th>
+                      <th>{total_cgst}</th>
+                      <th>{total_sgst}</th>
+                    </>
+                  )}
+                  <th>
+                    <small>Loyalty Points used: {deductedPoint}</small> <br />
+                    Total: {grand_total} 
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {comments && (
+            <div className='inv_comm'>
+              <h4>Comments:</h4>
+              <p>{comments}</p>  
+            </div>
+          )}
+
+          {/* Dropdown select field */}
+          <div className='appoint_select-field-cont'>
+            <label htmlFor="serviceSelect">Select Service:</label>
+            <select id="serviceSelect">
+              {services.map((service, index) => (
+                <option key={index} value={service.value}>{service.value}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className='invoice_footer'>
+            <div className='invoice_footer_left'>
+              <h4>Amount in Words:</h4>
+              <p>{grandTotalInWords} Rupees Only</p>
+            </div>
+            <div className='invoice_footer_right'>
+              <h4>FINAL VALUE:</h4>
+              <p>Rs {final_price}</p>
+            </div>
           </div>
         </div>
-
-        <div className='table-responsive'>
-          <table className='invoice_table table-bordered'>
-            <thead>
-              <tr style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
-                <th style={{ width: '5%' }}>S. No.</th>
-                <th style={{ width: '30%' }}>DESCRIPTION</th>
-                <th style={{ width: '10%' }}>PRICE</th>
-                <th style={{ width: '10%' }}>QUANTITY</th>
-                <th style={{ width: '10%' }}>DISCOUNT</th>
-                {/* <th style={{ width: '10%' }}>CGST(2.5%)</th> */}
-                {isGST ? (
-                  <>
-                    <th style={{ width: '10%' }}>TAX AMT(18%)</th>
-                    <th style={{ width: '10%' }}>CGST(9%)</th>
-                    <th style={{ width: '10%' }}>SGST(9%)</th>
-                  </>
-                ) : null}
-                {/* <th style={{ width: '10%' }}>SGST(2.5%)</th> */}
-                <th style={{ width: '10%', color: 'white', backgroundColor: '#0d6efd' }}>TOTAL AMT</th>
-              </tr>
-            </thead>
-            <tbody>
-  {services.map((service, index) => (
-    <tr key={index} style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
-      <td scope='col' style={{ textAlign: 'center' }}>{index + 1}</td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{service.value}</td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>
-        <input type='number' className='editable-field' id={`price_input_${index}`} value={prices[index]} readOnly onChange={(e) => handlePriceBlur(index, e.target.value)} />
-      </td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>
-        <input type='number' className='editable-field' id={`quantity_input_${index}`} value={quantities[index]} readOnly onBlur={(e) => handleQuantityBlur(index, e.target.value)} />
-      </td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>
-        <input type='number' className='editable-field' id={`discount_input_${index}`} defaultValue={discounts[index] === null || discounts[index] === undefined ? 0 : discounts[index]} onBlur={(e) => handleDiscountBlur(index, e.target.value)} />
-      </td>
-      {isGST ? (
-        <>
-          <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{taxes[index]}</td>
-          <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{cgst[index]}</td>
-          <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{sgst[index]}</td>
-        </>
-      ) : null}
-      <td scope='col' style={{ width: '20%', color: 'black', textAlign: 'center' }}>{totalAmts[index]}</td>
-    </tr>
-  ))}
-
-  {membership && (
-    <tr style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
-      <td scope='col' style={{ textAlign: 'center' }}>{services.length + 1}</td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{membership}</td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>
-        <input type='number' className='editable-field' value={membershipPrice} readOnly />
-      </td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>1</td> {/* Quantity is always 1 for membership */}
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>0</td> {/* Discount is always 0 */}
-      {isGST ? (
-        <>
-          <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{membershipTax}</td> {/* Calculated tax */}
-          <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{cgsts}</td> {/* Calculated CGST */}
-          <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{sgsts}</td> {/* Calculated SGST */}
-        </>
-      ) : null}
-
-    {isGST ? (
-  <td scope='col' style={{ width: '20%', color: 'black', textAlign: 'center' }}>
-    {(membershipTotal)} {/* Total including taxes */}
-  </td>
-) : (
-  <td scope='col' style={{ width: '20%', color: 'black', textAlign: 'center' }}>
-    {membershipTotal - membershipTax} {/* Total without taxes */}
-  </td>
-)}
-    </tr>
-  )}
-{productDetails.length > 0 && (
-  <>
-    <tr style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
-      <td scope='col' style={{ textAlign: 'center' }}>3</td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{productDetails[0].name}</td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>
-        <input type='number' className='editable-field' value={productDetails[0].price} readOnly />
-      </td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{productDetails[0].quantity}</td>
-      <td scope='col' className='text-center' style={{ textAlign: 'center' }}>0</td>
-      {isGST ? (
-        <>
-          <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{productDetails[0].tax}</td>
-          <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{productDetails[0].cgst}</td>
-          <td scope='col' className='text-center' style={{ textAlign: 'center' }}>{productDetails[0].sgst}</td>
-        </>
-      ) : null}
-      {isGST ? (
-  <td scope='col' style={{ width: '20%', color: 'black', textAlign: 'center' }}>
-    {(productDetails[0].total - productDetails[0].cgst - productDetails[0].sgst).toFixed(2)}
-  </td>
-) : (
-  <td scope='col' style={{ width: '20%', color: 'black', textAlign: 'center' }}>
-    {(productDetails[0].total -productDetails[0].tax -productDetails[0].cgst -productDetails[0].sgst)}
-  </td>
-)}
-
-    </tr>
-  </>
-)}
-
-
-{/* Total Row */}
-<tr style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
-  <th colSpan='2' style={{ width: '20%', color: 'white', fontWeight: 500, fontSize: 15, backgroundColor: '#0d6efd' }}>TOTAL</th>
-  <th style={{ width: '5%', padding: '0.7%' }} className='text-center'>{total_prise}</th>
-  <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{total_quantity}</th>
-  <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{total_discount}</th>
-  {isGST ? (
-    <>
-      <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{total_tax}</th>
-      <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{total_cgst}</th>
-      <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{total_sgst}</th>
-    </>
-  ) : null}
-  <th style={{ width: '10%', padding: '0.1%', backgroundColor: '#0d6efd', color: 'white' }}>
-    <small style={{ color: 'white' }}>Loyalty Points used: {deductedPoint}</small> <br />
-    Total: {grand_total} 
-  </th>
-</tr>
-</tbody>
-
-
-          </table>
-        </div>
-        {comments ? (
-  <div className='inv_comm'>
-    <h4>Comments:</h4>
-    <p>{comments}</p>  
-  </div>
-) : null}
-
-        <div className='invoice_footer'>
-          <div className='invoice_footer_left'>
-            <h4>Amount in Words:</h4>
-            <p>{grandTotalInWords} Rupees Only</p>
-          </div>
-          <div className='invoice_footer_right'>
-            <h4>FINAL VALUE:</h4>
-            <p>Rs {final_price}</p>
-          </div>
-        </div>
-        </div>
-        
-        </form>
-      </div>
-      <div className='generate-button-container'>
-  <button 
-    className='generate-button' 
-    onClick={handleGenerateInvoice} 
-    disabled={loading || invoiceGenerated}  
-  >
-    {loading ? <CircularProgress size={24} color="inherit" /> : 'Generate Final Invoice'}
-  </button>
-</div>
-      {showPopup && <Popup message={popupMessage} onClose={() => {setShowPopup(false); navigate(`/${sname}/${branchName}/dashboard`);} }/>}
+      </form>
     </div>
-  );
+
+    <div className='generate-button-container'>
+      <button 
+        className='generate-button' 
+        onClick={handleGenerateInvoice} 
+        disabled={loading || invoiceGenerated}
+      >
+        {loading ? <CircularProgress size={24} color="inherit" /> : 'Generate Final Invoice'}
+      </button>
+    </div>
+    {showPopup && <Popup message={popupMessage} onClose={() => {setShowPopup(false); navigate(`/${sname}/${branchName}/dashboard`);} }/>}
+  </div>
+);
+
+
+
+  
 }
 
 export default Invoice;

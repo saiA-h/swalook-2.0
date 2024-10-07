@@ -50,11 +50,8 @@
 // export default App;
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OwnerLogin from './components/Pages/OwnerLogin';
-import Login from './components/Pages/Login';
-import AdminLogin from './components/Pages/AdminLogin';
 import ServiceDetails from './components/Pages/ServiceDetails';
 import AdminDashboard from './components/Pages/AdminDashboard';
 import Settings from './components/Pages/Settings';
@@ -77,8 +74,7 @@ import CLP_Setting from './components/Pages/CLP_Setting';
 import CustomerL from './components/Pages/CustomerL';
 
 function App() {
-  const isLoggedIn = Cookies.get('loggedIn') === 'true';
-  const sname = Cookies.get('salonName');
+
 
   return (
     <div>
@@ -122,4 +118,3 @@ function App() {
 }
 
 export default App;
-

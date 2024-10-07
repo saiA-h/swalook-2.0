@@ -5,8 +5,6 @@ import '../Styles/GenerateInvoice.css'
 import Multiselect from 'multiselect-react-dropdown';
 import Header from './Header'
 import VertNav from './VertNav'
-import invoiceImg from '../../assets/invoice.png'
-import {Link} from 'react-router-dom'
 import { Helmet } from 'react-helmet';
 import config from '../../config';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,7 +12,6 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
 import CustomDialog from './CustomDialog';
-import { MailRounded } from '@mui/icons-material';
 
 function getCurrentDate() {
   const currentDate = new Date();
@@ -26,13 +23,11 @@ function getCurrentDate() {
 
 function GenerateInvoice() {
   const navigate = useNavigate();
-    const currentDate = getCurrentDate();
    const [serviceOptions, setServiceOptions] = useState([]);
    const [customer_name , setCustomer_Name] = useState('');
    const [email , setEmail] = useState('');
    const [mobile_no , setMobileNo] = useState(0);
    const [address , setAddress] = useState('');
-    const [GBselectedServices, GBsetSelectedServices] = useState([]);
     const [value , selectedValues] = useState([]);
     const [service_by, setServiceBy] = useState([]);
     const [discount, setDiscount] = useState(0);
@@ -670,21 +665,21 @@ const handleMembershipChange = async (selectMembership) => {
                 <hr className='gb_hr'/>
                 <div className='gi_con'>
                 <h3 className='cd'>Customer Details</h3>
-                <div className="gbform-group gb-name">
+                <div className="gbform-groups">
                 <label htmlFor="name">Name:</label>
                 <input type="text" id="name" className="gb_input-field" placeholder='Enter Full Name' value={customer_name} required onChange={(e) => setCustomer_Name(e.target.value)}/>
                 </div>
-                <div className="gbform-group gb-email">
+                <div className="gbform-group">
                 <label htmlFor="email">Email:</label>
-                <input type="email" id="email" className="gb_input-field email_gi" placeholder='Enter Email Address'  value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="email" id="email" className="gb_input-fields" placeholder='Enter Email Address'  value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
-                <div className="gbform-group gb-phone">
+                <div className="gbform-group">
                 <label htmlFor="phone">Phone:</label>
-                <input type="number" id="phone" className="gb_input-field" placeholder='Enter Mobile Number' required onBlur={handlePhoneBlur} onChange={(e)=>setMobileNo(e.target.value)}/>
+                <input type="number" id="phone" className="gb_input-fields" placeholder='Enter Mobile Number' required onBlur={handlePhoneBlur} onChange={(e)=>setMobileNo(e.target.value)}/>
                 </div>
-                <div className="gbform-group add_c">
+                <div className="gbform-groups">
                 <label htmlFor="address">Address:</label>
-                <input type="text" id="address" className="gb_input-field address_gi" placeholder='Enter Address' value={address} rows={3} onChange={(e)=>setAddress(e.target.value)}></input>
+                <input type="text" id="address" className="gb_input-field" placeholder='Enter Address' value={address} rows={3} onChange={(e)=>setAddress(e.target.value)}></input>
                 </div>
                 {userExists && membershipType !== 'None'  ? (
   <div className='services-table'>

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/CLP_Setting.css';
 import Header from './Header';
-import CLP from '../../assets/CLP.png';
+import CLP from '../../assets/crm.png';
 import { Helmet } from 'react-helmet';
 import AddIcon from '@mui/icons-material/Add';
 import config from '../../config';
@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import Modal from './Modal';
+import VertNav from './VertNav';
 
 function CLP_Setting() {
   const [fetchedRows, setFetchedRows] = useState([]);
@@ -226,6 +227,7 @@ function CLP_Setting() {
         <title>CLP Settings</title>
       </Helmet>
       <Header />
+      <VertNav/>
       <div className='clp_main'>
         <div className='clp_settings_content'>
           <h1 className='clp_settings_heading'>Customer Loyalty Programme Settings</h1>

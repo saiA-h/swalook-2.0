@@ -13,13 +13,15 @@ html, body {
 }
 
 .ba_horizontal {
-    height: 88vh;
     display: flex;
+    height: calc(100vh - 100px); /* Assuming header height is 70px */
     font-family: 'Montserrat', sans-serif;
+    width:1000px;
+    margin-left:150px;
 }
 
 .ba_h1 {
-    flex: 0 0 70px;
+    flex: 0 0 70px; /* Sidebar width */
     background-color: white;
 }
 
@@ -27,13 +29,13 @@ html, body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #f1f1f1;
+    background-color:white;
     align-items: center;
-    transition: background-color 0.3s ease;
+    padding: 20px; /* Added padding for better spacing */
 }
 
 .ba_heading {
-    margin-top: 10px;
+    margin: 20px 0; /* Adjusted margin */
     text-align: center;
     color: #091A44;
 }
@@ -48,7 +50,7 @@ html, body {
 }
 
 .ba_card {
-    background-color: #091A44;
+    background-color: #5570F1;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(80, 61, 149, 0.1);
     padding: 20px;
@@ -98,12 +100,6 @@ html, body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.ba_select_icon, .ba_calendar_icon {
-    width: 30px;
-    height: 30px;
-    margin: 0 10px;
-}
-
 .ba_select_heading {
     font-size: 24px;
     color: #091A44;
@@ -118,21 +114,13 @@ html, body {
     margin: 0 10px;
 }
 
-.ba-1 {
-    display: flex;
-}
-
-.ba-2 {
-    display: flex;
-}
-
 .ba_content {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 80%; 
-    margin: 10px;
+    margin: 10px 0; /* Adjusted margins */
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
@@ -141,36 +129,20 @@ html, body {
     text-align: center;
 }
 
-.ba_p{
+.ba_p {
     font-size: 20px;
     color: #091A44;
     margin: 10px;
     font-weight: lighter;
 }
 
-
-
 @media (max-width: 768px) {
     .ba_cards {
         justify-content: space-around;
     }
 
-    .ba_select_icon, .ba_calendar_icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .ba_select_heading {
-        font-size: 20px;
-    }
-
-    .ba_select_month {
-        width: 100%;
-    }
-
     .ba_content {
-        width: 100%;
-        height: 300px; /* Adjust height for smaller screens */
+        width: 90%; /* Adjust width for smaller screens */
     }
 }
 
@@ -184,24 +156,11 @@ html, body {
     }
 
     .ba_select_analysis {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        flex-direction: column;
         padding: 10px;
-    }
-
-    .ba_select_icon, .ba_calendar_icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .ba_select_heading {
-        font-size: 18px;
     }
 
     .ba_content {
         width: 100%;
-        height: 200px; /* Adjust height for smaller screens */
+        height: auto; /* Remove fixed height */
     }
 }

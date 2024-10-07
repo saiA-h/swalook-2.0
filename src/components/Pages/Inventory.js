@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/Inventory.css'
+import '../Styles/Inventory.css';
 import Header from './Header';
 import { Helmet } from 'react-helmet';
 import AddProductPopup from './AddProductPopup';
@@ -10,10 +10,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VertNav from './VertNav';
 
-
 function Inventory() {
     const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
-    const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
     const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
     const [editProductData, setEditProductData] = useState(null);
     const [inventoryData, setInventoryData] = useState([]);
@@ -26,17 +24,10 @@ function Inventory() {
         setIsAddPopupOpen(!isAddPopupOpen);
     };
 
-    const DeletetogglePopup = () => {
-        setIsDeletePopupOpen(!isDeletePopupOpen);
-    };
-
     const EdittogglePopup = (product) => {
         setEditProductData(product);
         setIsEditPopupOpen(!isEditPopupOpen);
     };
-
-    const [editServiceData, setEditServiceData] = useState(null);
-
 
     const handleDeleteClick = (item) => {
         setDeleteProductData(item); 
@@ -46,13 +37,12 @@ function Inventory() {
     const handleConfirmDelete = async () => {
         const token = localStorage.getItem('token');
         const productId = deleteProductData.id;  
-    
-    
+
         if (!productId) {
             console.error("Product ID is missing or invalid.");
             return;
         }
-    
+
         try {
             const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?id=${productId}`, {
                 method: 'DELETE',
@@ -61,7 +51,7 @@ function Inventory() {
                     'Content-Type': 'application/json'
                 }
             });
-    
+
             if (response.ok) {
                 console.log('Product deleted successfully');
                 setInventoryData(inventoryData.filter(item => item.product_id !== productId));
@@ -74,8 +64,7 @@ function Inventory() {
         }
         setIsConfirmDialogOpen(false); 
     };
-    
-    
+
     const handleCancelDelete = () => {
         setIsConfirmDialogOpen(false); 
     };
@@ -83,11 +72,10 @@ function Inventory() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const branchName = localStorage.getItem('branch_name');
                 const token = localStorage.getItem('token');
 
-                if (!branchName || !token) {
-                    throw new Error('Branch name or token is missing.');
+                if (!token) {
+                    throw new Error('Token is missing.');
                 }
 
                 const response = await fetch(`${config.apiUrl}/api/swalook/inventory/product/?branch_name=${bid}`, {
@@ -97,7 +85,7 @@ function Inventory() {
                         'Authorization': `Token ${token}`
                     },
                 });
-                // console.log("kuch v",response);
+
                 if (!response.ok) {
                     throw new Error('Network response was not ok.');
                 }
@@ -112,74 +100,65 @@ function Inventory() {
         fetchData();
     }, []);
 
-
-  return (
-    <div className='admin_inventory_container'>
+    return (
+        <div className='admin_inventory_container'>
             <Helmet>
-        <title>Inventory</title>
-      </Helmet>
+                <title>Inventory</title>
+            </Helmet>
             <div className='c_header'>
-
-            <Header />
+                <Header />
             </div>
-         
+            <VertNav />
             <div className="inventory_details_header">
                 <h1>Inventory Details</h1>
                 <div>
-                    <button className="add_inventory_button" onClick={AddtogglePopup}>Add </button>
-                    {/* <button className="delete_inventory_button" onClick={DeletetogglePopup}>Delete </button> */}
+                    <button className="add_inventory_button" onClick={AddtogglePopup}>Add</button>
                 </div>
             </div>
            
             <div className="horizontal_line_container">
                 <hr className="horizontal_line" />
             </div>
+            
             <div className='update'>
-
-            <div className='gb_h9'>
-        <div className='gb_ver_nav2'>
-          <VertNav />
-        </div>
-        </div>
-            <div className="admin_inventory_table_container">
-                <table className="admin_inventory_table">
-                    <thead>
-                        <tr>
-                            <th>S.No</th>
-                            <th> Name</th>
-                            <th>SKU</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {inventoryData.map((item, index) => (
-                            <tr key={item.product_id}>
-                                <td>{index + 1}</td>
-                                <td>{item.product_name}</td>
-                                <td>{item.product_id}</td>
-                                <td>{item.stocks_in_hand}</td>
-                                <td>{item.product_price}</td>
-                                <td> <EditIcon
-                                        onClick={() => EdittogglePopup(item)}
-                                        style={{ cursor: 'pointer' }}
-                                    /></td>
-                                     <td>
-                                <DeleteIcon
-                                    onClick={() => handleDeleteClick(item)}
-                                    style={{ cursor: 'pointer', color: 'red' }}
-                                />
-                            </td>
+                <div className="admin_inventory_table_container">
+                    <table className="admin_inventory_table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>SKU</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-           </div> 
+                        </thead>
+                        <tbody>
+                            {inventoryData.map((item, index) => (
+                                <tr key={item.product_id}>
+                                    <td>{index + 1}</td>
+                                    <td>{item.product_name}</td>
+                                    <td>{item.product_id}</td>
+                                    <td>{item.stocks_in_hand}</td>
+                                    <td>{item.product_price}</td>
+                                    <td>
+                                        <EditIcon onClick={() => EdittogglePopup(item)} style={{ cursor: 'pointer' }} />
+                                    </td>
+                                    <td>
+                                        <DeleteIcon 
+                                            onClick={() => handleDeleteClick(item)} 
+                                            style={{ cursor: 'pointer', color: 'black' }} // Changed color to black
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+
             {isAddPopupOpen && <AddProductPopup onClose={AddtogglePopup} />}
-            {/* {isDeletePopupOpen && <DeleteProductPopup onClose={DeletetogglePopup} />} */}
             {isEditPopupOpen && <EditProductPopup productData={editProductData} onClose={EdittogglePopup} />}
             {isConfirmDialogOpen && (
                 <DeleteProductPopup
@@ -190,9 +169,7 @@ function Inventory() {
                 />
             )}
         </div>
-  )
+    );
 }
 
-export default Inventory
-
-
+export default Inventory;

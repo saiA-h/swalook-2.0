@@ -5,7 +5,9 @@
 }
 
 .clp_setting_container{
-    background-color: #f1f1f1;
+    background-color: white;
+    margin-top: 250px;
+    margin-left: 160px;
 }
 
 .clp_setting_container {
@@ -77,22 +79,23 @@ html, body {
     gap: 40px;
     align-items: center;
     padding: 20px;
+    width:300px;
   }
   
   .clps_table_container table {
-    width: 100%;
+    width: 750px;
     border-collapse: collapse;
   }
   
   .clps_table_container th, .clps_table_container td {
-    border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
   }
   
   .clps_table_container th {
-    background-color: #091A44;
-    color: white;
+    background-color:white;
+    color: #B5B7C0;
+  
   }
   
   .clp_threshold_container {

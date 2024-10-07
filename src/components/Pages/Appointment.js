@@ -301,32 +301,32 @@ function Appointment() {
         <div className='ba_con'>
         <h3 className='cd'>Customer Details</h3>
         <div className='app'>
-        <div className="appointform-group appoint-text">
+        <div className="appointform-group">
                 <label htmlFor="name">Name:</label>
-                <input type="text" id="name" className="appoint_input-field" placeholder='Enter Full Name' required  onChange={(e)=> setCustomerName(e.target.value)}/>
+                <input type="text" id="name" className="appoint_input" placeholder='Enter Full Name' required  onChange={(e)=> setCustomerName(e.target.value)}/>
         </div>
-        <div className="appointform-group appoint-email">
+        <div className="appointform-groups">
                 <label htmlFor="email">Email:</label>
-                <input type="email" id="email" className="appoint_input-field" placeholder='Enter Email Address' onChange={(e)=>setEmail(e.target.value)}/>
+                <input type="email" id="email" className="appoint_input-s" placeholder='Enter Email Address' onChange={(e)=>setEmail(e.target.value)}/>
         </div>
-        <div className="appointform-group appoint-phone">
+        <div className="appointform-groups">
                 <label htmlFor="phone">Phone:</label>
-                <input type="number" id="phone" className="appoint_input-field" placeholder='Enter Mobile Number' required onChange={(e)=>setMobileNo(e.target.value )} maxLength={10}/>
+                <input type="number" id="phone" className="appoint_input-s" placeholder='Enter Mobile Number' required onChange={(e)=>setMobileNo(e.target.value )} maxLength={10}/>
         </div>
         </div>
         <h3 className='sts'>Select the Service</h3>
         <div className='appoint_select-field-cont'>
           <div className='ss'>
-            <Multiselect
-              options={serviceOptions}
-              showSearch={true}
-              onSelect={handleSelect}
-              onRemove={handleSelect}
-              displayValue="value"
-              placeholder="Select Services...."
-              className="appoint_select-field"
-              showCheckbox={true}
-            />
+          <Multiselect
+  options={serviceOptions}
+  showSearch={true}
+  onSelect={handleSelect}
+  onRemove={handleSelect}
+  displayValue="value"
+  placeholder="Select Services...."
+  className="appoint_select-field" // This class will apply the custom styles
+  showCheckbox={true}
+/>
             </div>
             </div>
             <div className="appointform-group" style={{ marginTop: '10px' }}>

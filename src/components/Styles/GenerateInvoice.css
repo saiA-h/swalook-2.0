@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -6,18 +6,56 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
-}
-html, body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
+}
+
+.gbform-group {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin-left: 120px;
+}
+
+.gbform-groups {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin-left: 120px;
+}
+
+.gb_input-field {
+  padding: 8px;
+  border: 1px solid #CFD3D4; /* General border */
+  border-radius: 8px;
+  height: 58px;
+  width: 100%;
+}
+.gb_input-fields{
+  padding: 8px;
+  border: 1px solid #CFD3D4; /* General border */
+  border-radius: 8px;
+  height: 58px;
+  width: 100%;
+}
+.gb_select-field{
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin-left: 120px;
 
 }
-.gb_horizontal{
+
+.gb_horizontal {
   height: 90vh;
   display: flex;
-  font-family: 'Montserrat', sans-serif;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-input{
+input, select {
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -27,183 +65,101 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-.status-dropdown{
-  font-family: 'Montserrat', sans-serif;
-}
+/* General Styling */
 .GI {
   color: #091A44;
 }
 
-.gb_h1{
-  flex: 0 0 70px; 
-  background-color: white; 
+.gb_h1, .gb_h2 {
+  background-color: white;
 }
 
-.gb_h2{
-  flex: 1; 
+.gb_h1 {
+  flex: 0 0 70px;
+}
+
+.gb_h2 {
+  flex: 1;
   display: flex;
-  background-color: white; 
   justify-content: space-around;
   height: 100vh;
   transition: background-color 0.3s ease;
 }
 
-.gb_left{
-  margin-top: 20px;
-  width: 45%; 
-  height: 90vh;
+/* Layout */
+.gb_left, .gb_right {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.gst_no label{
-  margin-right: 50px;
+.gb_left {
+  margin-top: 60px;
+  width: 700px;
+  padding: 20px;
+  margin-right: 10px;
+  height: 1100px;
+  margin-left: 180px;
+  border-radius:30px;
 }
 
 .gb_right {
-  margin-top: 20px;
-  width: 45%; 
-  height: auto;
-  background-color: white;
-  border-radius: 10px; 
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  margin-top: 60px;
+  width: 700px;
+  margin-left: 50px;
+  height: 1100px;
+  border-radius:30px;
 }
 
-.GI{
-  margin-top: 10px;
-  text-align: center;
-  color: #091A44;
-}
+/* Select Field Styles */
 
-.gb_hr{
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
 
-.gb_input-field {
-  width: 100%; /* Adjusted width for all input fields */
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 5px;
-}
 
-.gbform-group {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
 
-.gbform-group-radio{
-  display: flex;
-  margin-left: 10px;
-} 
 
-.gbform-group-radio input{
-  margin-right: 20px;
-} 
 .gbform-group label {
-  margin-left: 10px;
-  margin-top: 12px;
-  margin-right: 10px;
-  text-align: center;
-  display: block;
-  margin-bottom: 5px;
+  margin-right: 10px; /* Uniform margin */
+  color: #091A44; /* Label color */
 }
 
-.gb_select-field-cont{
-  margin-left: 10px;
-  margin-top: 10px;
-  width: 80%; /* Adjusted width for select field containers */
-}
-
-.gb-email label{
-  margin-right: 30px;
-}
-
-.gb-name label{
-  margin-right: 28px;
-}
-
-.gb-phone label{
-  margin-right: 23px;
-}
-
-.gb-phone input{
-  height: 30px;
-}
-
-.sb{
-  margin-left: 10px;
-  margin-top: 10px;
-  color: #091A44;
-  display: flex;
-  text-align: left;
-  text-decoration: underline;   
-}
-
-.gb_btn_contain{
+.gb_btn_contain {
   padding: 10px;
   display: flex;
   justify-content: center;
 }
 
 .gb_button {
-  /* margin-top: 20px; */
-  width: 60%; /* Adjusted button width for better display */
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #091A44;
+  width: 50%; 
+  padding: 10px 16px; 
+  background-color: #5570F1; 
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px; 
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .gb_button:hover {
   background-color: #0b2158;
 }
 
-.invoice_img{
-  width: 35vw;
-  margin-top: 30px;
-}
-
-.gb_appoint{
-  margin-top: 10px;
-  text-align: center;
-  color: #091A44;
-}
-
-.gb_hr{
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.gb_table_wrapper {
-  margin-top: 10px;
-  max-height: 75vh; 
-  overflow-y: auto; 
-  overflow-x: auto;
-}
-
+/* Table Styles */
 .gb_table {
   width: 100%;
   border-collapse: collapse;
 }
 
-
 .gb_table th, .gb_table td {
-  border: 1px solid #dddddd;
-  padding: 8px;
+  padding: 10px; 
   text-align: center;
+  border: 1px solid #dddddd;
 }
 
 .gb_table th {
-  background-color: #f2f2f2;
+  font-family: 'Poppins', sans-serif; 
+  font-weight: 500;
+  color: #B5B7C0; 
+  background-color: transparent;
 }
 
 .gb_table tbody tr:nth-child(even) {
@@ -214,161 +170,17 @@ input::-webkit-inner-spin-button {
   background-color: #e2e2e2;
 }
 
-.gb_table th, .gb_table td {
-  padding: 10px;
-}
-
-.serv_gb{
-  display: flex;
-  justify-self: space-between;  
-
-}
-
+/* Media Queries */
 @media only screen and (max-width: 768px) {
   .gb_right {
-      display: none; /* Hide .gb_right div for mobile view */
+      display: none; 
   }
 
   .gb_left {
-      width: 100%; /* Adjusted width for mobile view */
+      width: 100%; 
   }
 
   .gb_button {
-      width: 60%; /* Adjusted button width for better display */
-  }
-
-  .gi_con{
-    padding: 10px;
-  }
-
-  .radio_gi{
-    margin-left: 10px;
-  }
-
-  .email_gi{
-    margin-left: 5px;
-  }
-
-  /* .address_gi{
-    margin-right: 5px;
-  } */
-
-  .gi_con{
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    align-items: left;
-  }
-
-  .gb-name label{
-    margin-right: 33px;
-  }
-
-  .gb-email label{
-    margin-right: 30px;
-  }
-
-  .add_c label {
-    margin-left: 10px;
-    margin-top: 12px;
-    margin-right: 15px;
-    text-align: center;
-    display: block;
-    margin-bottom: 5px;
-  }
-  
- 
-
-  .gb-phone label{
-    margin-right: 30px;
+      width: 60%; 
   }
 }
-
-
-.service-table-field {
-  width: 80px; /* Adjust the width as per your requirement */
-}
-
-
-.services-table {
-  margin-top: 20px;
-  margin-left: 10px;
-}
-
-.services-table table {
-  width: 100%;
-  
-  /* border-collapse: collapse; */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.services-table th, .services-table td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ddd;
-}
-
-.services-table th {
-  background-color: #f4f4f4;
-}
-
-.services-table  {
-  max-height: 150px; 
-  overflow-y: auto;
-}
-
-.services-table tbody tr {
-  width: 100%;
- 
-}
-
-.services-table tbody::-webkit-scrollbar {
-  width: 8px;
-}
-
-.services-table tbody::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-.services-table tbody::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-
-/* Container for the membership selection */
-.membership-container {
-  width: 100%;
-  max-width: 500px; 
-  /* margin: 0 auto;  */
-  padding: 0 16px;
-  box-sizing: border-box; 
-  margin-top: 15px;
-}
-
-.membership-label {
-  display: block;
-  color: #4a4a4a; 
-  font-weight: 600; 
-  margin-bottom: 8px; 
-}
-
-.membership-select {
-  width: 100%;
-  padding: 8px 12px; 
-  border: 1px solid #d1d5db;
-  border-radius: 4px; 
-  background-color: #fff; 
-  font-size: 16px; 
-  color: #333; 
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
-  transition: border-color 0.2s ease; 
-}
-
-.membership-select:focus {
-  border-color: #4a90e2; 
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); 
-}
-
-
-

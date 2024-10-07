@@ -6,22 +6,23 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
+  background-color: #FFFFFF; /* Set background to white */
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: #091A44;
-  color: #fff;
-}
-
-.nav-link {
-  color: white;
-  text-decoration: none;
+  padding: 0 20px; /* Horizontal padding */
+  background-color: #FFFFFF; /* Background color */
+  color: black; /* Text color */
+  width: calc(100% - 296px); /* Adjusted width to match the sidebar */
+  height: 84px; /* Fixed height */
+  position: fixed; /* Keep fixed */
+  top: 0; /* Align to the top */
+  left: 296px; /* Align next to the sidebar */
+  z-index: 1000; /* Ensure it appears above other content */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
 }
 
 .navbar-left {
@@ -29,38 +30,35 @@ body {
   align-items: center;
 }
 
-.navbar-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  gap: 2rem;
-}
-
-.header_logo {
-  width: auto; /* Adjust the width */
-  height: 100px; /* Maintain aspect ratio */
-
-}
-
-.nav-button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  background-color: transparent;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.nav-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.dashboard-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  text-align: left;
 }
 
 .navbar-right {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  gap: 15px; /* Space between elements */
+}
+
+.notification-icon {
+  font-size: 36px; /* Size of the icon */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.select-input {
+  width: 154px; /* Width of the input */
+  height: 32px; /* Height of the input */
+  padding: 5px 12px; /* Padding */
+  border-radius: 10px; /* Increased border radius */
+  background-color: #FEF5EA; /* Background color */
+  border: 1px solid #ccc; /* Optional border */
+  opacity: 1; /* Fully visible */
+  margin-right: 15px; /* Space between select input and notification icon */
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
 .user-photo {
@@ -70,13 +68,15 @@ body {
   cursor: pointer;
 }
 
-.down-arrow {
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid #fff;
-  margin-left: 5px;
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.account-icon {
+  font-size: 36px;
 }
 
 .dropdown-menu {
@@ -84,16 +84,12 @@ body {
   top: 100%;
   right: 0;
   width: 100%;
-  background-color: #333;
-  border-radius: 4px;
+  background-color: #333; /* Dropdown background */
+  border-radius: 30px;
   flex-direction: column;
   min-width: 200px;
   padding: 5px 0;
-}
-
-.dropdown-menu.active {
-  display: flex; /* Show when active */
-  z-index: 1;
+  z-index: 1001; /* Ensure dropdown is above other elements */
 }
 
 .dropdown-item {
@@ -106,76 +102,34 @@ body {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.profile-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
+.down-arrow {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #000; /* Adjust the color */
+  margin-left: 5px;
 }
 
-.nav-btn {
-  cursor: pointer;
-  visibility: hidden;
+.invisible-line {
+  border: none; /* No visible border */
+  height: 2px; /* Height of the line */
+  background-color: transparent; /* Make it invisible */
+  margin-top: 5px; /* Space between heading and line */
 }
 
-@media only screen and (max-width: 1024px) {
-  .navbar-center {
-    gap: 1rem; /* Adjust gap for smaller screens */
-  }
-
-  .header_logo {
-    width: 100px; /* Adjust for smaller screens */
-  }
+.home-icon {
+  font-size: 36px; /* Size of the icon */
+  cursor: pointer; /* Pointer cursor on hover */
+  margin-right: 15px; /* Space between icon and dashboard heading */
+  margin-top:40px;
 }
 
-@media only screen and (max-width: 768px) {
- 
-
-  .nav-btn {
-    visibility: visible;
-  }
-
-  .navbar-center {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: #091A44;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(-100%);
-    transition: transform 1s ease-in-out;
-    gap: 1.5rem;
-  }
-
-  .responsive_nav {
-    transform: translateY(0);
-  }
-
-  .nav-button {
-    margin: 0 3px;
-    padding: 3px 8px;
-  }
-
-  .header_logo {
-    width: 100px; /* Adjust for smaller screens */
-  }
-
-  .dropdown-menu {
-    min-width: 150px;
-  }
-
-  .profile-image {
-    width: 30px;
-    height: 30px;
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  .header_logo {
-    width: 100px; /* Adjust for smaller screens */
-  }
+.logo {
+  width: 101px;
+  height: 90px;
+  position: absolute;
+  top: 6px;
+  left: 89px;
+  opacity: 1; /* Set to 1 for visibility */
 }

@@ -9,6 +9,7 @@ import config from '../../config';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+
 function ViewInvoice() {
   const { id } = useParams();
   const [saloon_name, setSaloonName] = useState('');
@@ -139,26 +140,20 @@ function ViewInvoice() {
                 <h5>InvoiceId: {invoiceData.slno}</h5>
                 <div className='invoice_date'>
                   <p>Date of Invoice: {invoiceData.date}</p>
-                  <p></p>
                 </div>
-                {isGST ? (
-                  <div className='invoice_gst'>
-                    <p>GST Number: {invoiceData.gst_number}</p>
-                  </div>
-                ) : null}
+                {isGST && <p>GST Number: {invoiceData.gst_number}</p>}
               </div>
             </div>
-
+  
             <div className='table-responsive'>
               <table className='invoice_table table-bordered'>
                 <thead>
-                  <tr style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
+                  <tr style={{ border: '1px solid #787871', backgroundColor: '#fff' }}>
                     <th style={{ width: '5%' }}>S. No.</th>
                     <th style={{ width: '30%' }}>DESCRIPTION</th>
                     <th style={{ width: '10%' }}>PRICE</th>
                     <th style={{ width: '10%' }}>QUANTITY</th>
                     <th style={{ width: '10%' }}>DISCOUNT</th>
-                    {/* <th style={{ width: '10%' }}>TAX AMT</th> */}
                     {showCGST && <th style={{ width: '10%' }}>TAX AMT</th>}
                     {showCGST && <th style={{ width: '10%' }}>CGST(2.5%)</th>}
                     {showSGST && <th style={{ width: '10%' }}>SGST(2.5%)</th>}
@@ -167,92 +162,53 @@ function ViewInvoice() {
                 </thead>
                 <tbody>
                   {services.map((item, index) => (
-                    <tr key={index} style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
-                      <td style={{ width: '5%', padding: '0.7%' , textAlign:"center" }} className='text-center'>{index + 1}</td>
-                      <td style={{ width: '30%', padding: '0.7%' ,textAlign:"center"}} className='text-center'>{item.Description}</td>
-                      <td style={{ width: '10%', padding: '0.7%',textAlign:"center" }} className='text-center'>{item.Price}</td>
-                      <td style={{ width: '10%', padding: '0.7%' ,textAlign:"center"}} className='text-center'>{item.Quantity}</td>
-                      <td style={{ width: '10%', padding: '0.7%',textAlign:"center" }} className='text-center'>{item.Discount}</td>
-                      {/* <td style={{ width: '10%', padding: '0.7%' }} className='text-center'>{item.Tax_amt}</td> */}
+                    <tr key={index} style={{ border: '1px solid #787871', backgroundColor: '#fff' }}>
+                      <td className='text-center'>{index + 1}</td>
+                      <td className='text-center'>{item.Description}</td>
+                      <td className='text-center'>{item.Price}</td>
+                      <td className='text-center'>{item.Quantity}</td>
+                      <td className='text-center'>{item.Discount}</td>
                       {isGST ? (
-  <>
-    {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>{item.Tax_amt}</td>}
-    {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>{item.CGST}</td>}
-    {showSGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>{item.SGST}</td>}
-  </>
-) : (
-  <>
-  {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>0</td>}
-    {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>0</td>}
-    {showSGST && <td style={{ width: '10%', padding: '0.7%', textAlign: 'center' }} className='text-center'>0</td>}
-    </>
-)
-
-}
-
-                      <td style={{ width: '10%', padding: '0.7%',textAlign:"center" }} className='text-center'>{item.Total_amount}</td>
+                        <>
+                          {showCGST && <td className='text-center'>{item.Tax_amt}</td>}
+                          {showCGST && <td className='text-center'>{item.CGST}</td>}
+                          {showSGST && <td className='text-center'>{item.SGST}</td>}
+                        </>
+                      ) : (
+                        <>
+                          {showCGST && <td className='text-center'>0</td>}
+                          {showCGST && <td className='text-center'>0</td>}
+                          {showSGST && <td className='text-center'>0</td>}
+                        </>
+                      )}
+                      <td className='text-center'>{item.Total_amount}</td>
                     </tr>
                   ))}
-                  {/* {products.map((product, index) => (
-        <tr key={index} style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
-          <td style={{ width: '5%', padding: '0.7%', textAlign: "center" }}>P{index + 1}</td>
-          <td style={{ width: '30%', padding: '0.7%', textAlign: "center" }}>{product.name}</td>
-          <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.price}</td>
-          <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.quantity}</td>
-          <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.discount}</td>
-          {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.tax}</td>}
-          {showCGST && <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.cgst}</td>}
-          {showSGST && <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.sgst}</td>}
-          <td style={{ width: '10%', padding: '0.7%', textAlign: "center" }}>{product.total}</td>
-        </tr>
-      ))} */}
-  {/* {membership && (
-  <tr style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
-      <td scope='col' style={{ textAlign: 'center' }}>{services.length + 1}</td>
-      <td style={{ width: '30%', padding: '0.7%' ,textAlign:"center"}} className='text-center'>{membership.membership}</td>
-      <td style={{ textAlign: 'center' }}>{membership.membershipPrice}</td>
-    <td style={{ textAlign: 'center' }}>1</td>
-    <td style={{ textAlign: 'center' }}>0000</td>
-    {showCGST && <td style={{ textAlign: 'center' }}>{membership.membershipTax}</td>}
-    {showCGST && <td style={{ textAlign: 'center' }}>{membership.CGST}</td>}
-    {showSGST && <td style={{ textAlign: 'center' }}>{membership.SGST}</td>}
-    <td style={{ textAlign: 'center' }}>{membership.membershipTotal}</td>
-  </tr>
-)} */}
-
-
-                  <tr style={{ border: '1px solid #787871', padding: '3px', backgroundColor: '#fff' }}>
-                    <th colSpan='2' style={{ width: '20%', color: 'white', fontWeight: 500, fontSize: 15, backgroundColor: '#0d6efd' }}>TOTAL</th>
-                    <th style={{ width: '5%', padding: '0.7%' }} className='text-center'>{invoiceData.total_prise}</th>
-                    <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{invoiceData.total_quantity}</th>
-                    <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{invoiceData.total_discount}</th>
-                    {/* <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{invoiceData.total_tax}</th> */}
-                    {showCGST && <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{invoiceData.total_tax}</th>}
-                    {showCGST && <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{invoiceData.total_cgst}</th>}
-                    {showSGST && <th style={{ width: '10%', padding: '0.7%' }} className='text-center'>{invoiceData.total_sgst}</th>}
-                    {/* <th style={{ width: '10%', padding: '0.7%', backgroundColor: '#0d6efd', color: 'white' }}>{invoiceData.grand_total}</th> */}
-                    <th style={{ width: '10%', padding: '0.7%', backgroundColor: '#0d6efd', color: 'white' }}>
-                      <>
-                      <small style={{ color: 'white' }}>Loyality Points used: {invoiceData.loyalty_points_deducted}</small> <br />
-                      Total: {invoiceData.grand_total} 
-                      </>
+  
+                  <tr style={{ border: '1px solid #787871', backgroundColor: '#fff' }}>
+                    <th colSpan='2' style={{ color: 'white', backgroundColor: '#0d6efd' }}>TOTAL</th>
+                    <th className='text-center'>{invoiceData.total_prise}</th>
+                    <th className='text-center'>{invoiceData.total_quantity}</th>
+                    <th className='text-center'>{invoiceData.total_discount}</th>
+                    {showCGST && <th className='text-center'>{invoiceData.total_tax}</th>}
+                    {showCGST && <th className='text-center'>{invoiceData.total_cgst}</th>}
+                    {showSGST && <th className='text-center'>{invoiceData.total_sgst}</th>}
+                    <th className='text-center' style={{ backgroundColor: '#0d6efd', color: 'white' }}>
+                      <small>Loyalty Points used: {invoiceData.loyalty_points_deducted}</small> <br />
+                      Total: {invoiceData.grand_total}
                     </th>
                   </tr>
                 </tbody>
               </table>
             </div>
-            {/* <div className='inv_comm'>
-               <h4>Comments:</h4><p>{invoiceData.comment}</p>  
-            </div> */}
-
-            {invoiceData.comment ? (
+  
+            {invoiceData.comment && (
               <div className='invoice_comment'>
                 <h4>Comments:</h4>
                 <p>{invoiceData.comment}</p>
               </div>
-            ) : null
-            }
-
+            )}
+  
             <div className='invoice_footer'>
               <div className='invoice_footer_left'>
                 <h4>Amount in Words:</h4>
@@ -263,16 +219,16 @@ function ViewInvoice() {
                 <p>Rs {invoiceData.grand_total}</p>
               </div>
             </div>
-            
           </div>
         </form>
-       
-      </div>
-      <div className='download_button'>
-        <button onClick={generatePDF}>Download as PDF</button>
+  
+        <div className='download_button'>
+          <button onClick={generatePDF}>Download as PDF</button>
+        </div>
       </div>
     </div>
   );
+  
 }
 
 export default ViewInvoice;

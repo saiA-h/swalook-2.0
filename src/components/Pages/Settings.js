@@ -8,6 +8,7 @@ import SY from '../../assets/SY.png'
 import CLP from '../../assets/CLP.png'
 import axios from 'axios';
 import config from '../../config';
+import VertNav from './VertNav';
 
 function Settings() {
   const [newRows, setNewRows] = useState([]);
@@ -53,6 +54,7 @@ const handleSave = async () => {
   return (
     <div className='settings_container'>
         <Header />
+        <VertNav/>
         <div className="content_container">
         <Link to={`/${sname}/${branchName}/settings/personalInformation`} className="settings_box" >
           <img src={PI} alt="Personal Information" />

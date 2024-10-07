@@ -9,6 +9,7 @@ import { Helmet } from 'react-helmet';
 import config from '../../config';
 import EditIcon from '@mui/icons-material/Edit';
 import CircularProgress from '@mui/material/CircularProgress';
+import VertNav from './VertNav';
 
 function ServiceDetails() {
     const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
@@ -18,8 +19,6 @@ function ServiceDetails() {
     const [loading, setLoading] = useState(true);
     const bid = localStorage.getItem('branch_id');
 
-    console.log(bid);
-    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -30,8 +29,7 @@ function ServiceDetails() {
                         'Content-Type': 'application/json'
                     }
                 });
-    
-                console.log(response.data);
+
                 setFetchService(response.data.data.map((service) => ({
                     id: service.id,
                     service: service.service,
@@ -48,12 +46,6 @@ function ServiceDetails() {
         fetchData();
     }, []);
     
-      
-;
-      
-
-      console.log(fetchService);
-      
     const AddtogglePopup = () => {
         setIsAddPopupOpen(!isAddPopupOpen);
     };
@@ -67,23 +59,22 @@ function ServiceDetails() {
         setEditServiceData({ id, serviceName, serviceDuration, servicePrice });
     }
     
-
-    const [editServiceData, setEditServiceData] = useState(null); // State variable to store data for editing
+    const [editServiceData, setEditServiceData] = useState(null);
 
     return (
         <div className='admin_service_container'>
             <Helmet>
-        <title>Services</title>
-      </Helmet>
+                <title>Services</title>
+            </Helmet>
             <div className='c_header'>
-
-            <Header />
+                <Header />
+                <VertNav/>
             </div>
             <div className="service_details_header">
                 <h1>Service Details</h1>
                 <div>
-                    <button className="add_service_button" onClick={AddtogglePopup}>Add </button>
-                    <button className="delete_service_button" onClick={DeletetogglePopup} >Delete </button>
+                    <button className="add_service_button" onClick={AddtogglePopup}>Add</button>
+                    <button className="delete_service_button" onClick={DeletetogglePopup}>Delete</button>
                 </div>
             </div>
             <div className="horizontal_line_container">
@@ -100,16 +91,15 @@ function ServiceDetails() {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            loading ? <tr><td colSpan="4"><CircularProgress /></td></tr> :
+                        {loading ? 
+                            <tr><td colSpan="4"><CircularProgress /></td></tr> :
                             fetchService.length > 0 && fetchService.map((ser) => (
                                 <tr key={ser.id}>
                                     <td>{ser.service}</td>
                                     <td>{ser.service_duration}</td>
                                     <td>{ser.service_price}</td>
-                                    {/* <td><button className="edit_service_button" onClick={() => EdittogglePopup(ser.id, ser.service)}>Edit</button></td>  */}
                                     <td><EditIcon onClick={() => EdittogglePopup(ser.id, ser.service, ser.service_duration, ser.service_price)} style={{ cursor: 'pointer' }} /></td>
-                                    </tr>
+                                </tr>
                             ))
                         }
                     </tbody>
@@ -117,9 +107,9 @@ function ServiceDetails() {
             </div>
             {isAddPopupOpen && <AddServicePopup onClose={AddtogglePopup} />}
             {isDeletePopupOpen && <DeleteServicePopup onClose={DeletetogglePopup} />}
-            {isEditPopupOpen && <EditServicePopup serviceData={editServiceData} onClose={EdittogglePopup} />} {/* Pass serviceData to EditServicePopup */}
+            {isEditPopupOpen && <EditServicePopup serviceData={editServiceData} onClose={EdittogglePopup} />}
         </div>
-    )
+    );
 }
 
 export default ServiceDetails;

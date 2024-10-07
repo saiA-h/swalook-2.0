@@ -10,39 +10,37 @@ body {
 
 .personal_information_container {
   background-color: white;
-  width: 100%;
-  min-height: 100vh; /* Use min-height for full height */
+  width: 1000px;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column; /* Arrange children vertically */
-  font-family: 'Montserrat', sans-serif;
+  flex-direction: column;
+  margin-top: 150px;
 }
 
 .pi_main {
-  padding: 20px;
-  flex: 1; /* Take remaining vertical space */
+  padding: 10px;
+  flex: 1;
 }
 
 .pi_horizontal_container {
   display: flex;
-  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
-  justify-content: space-around;
+  align-items: flex-start; /* Align items to the top */
+  justify-content: center; /* Center content */
+  flex-wrap: wrap; /* Allow wrapping */
 }
 
 .pi_horizontal_item {
-  width: 100%; /* Full width on smaller screens */
-  max-width: 45rem; /* Limit maximum width for larger screens */
-  margin: 10px;
+  max-width: 600px; /* Increased max-width of input container */
   padding: 20px;
   border-radius: 5px;
-
+  display: flex; /* Use flexbox for better alignment */
+  flex-direction: column; /* Stack items vertically */
 }
 
 .pi_horizontal_item img {
-  margin-top: 10px;
+  margin-top: 160px; /* Adjusted margin for better spacing */
   width: 100%;
-  max-width: 200px; /* Limit image width */
-  display: block;
-  margin: 0 auto;
+  max-width: 300px; /* Limit image width */
 }
 
 .pi_horizontal_item h2 {
@@ -52,36 +50,32 @@ body {
 
 .pi_input_container {
   display: flex;
-  flex-wrap: wrap; /* Allow input containers to wrap */
-  align-items: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  flex-direction: column; /* Stack label and input vertically */
+  align-items: center; /* Center the items */
+  width: 400px; /* Maintain input width */
+  margin-top: 10px; /* Space between inputs */
+  margin-left:10px;
 }
 
 .pi_input_container label {
-  margin-bottom: 5px;
   font-weight: bold;
-  flex: 1; /* Take remaining space */
-  min-width: 100px; /* Minimum label width */
-  margin-left: 10px;
+  text-align: center; /* Center the label */
 }
 
-.pi_input_container input {
-  padding: 5px;
+.pi_input_container input { /* Increased padding for better usability */
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-left: 10px;
-  font-size: 16px;
-  flex: 1; /* Take remaining space */
+  width: 100%; /* Make input take full width */
+  font-size: 14px;
 }
 
 .pi_input_container input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #007bff; /* Blue outline on focus */
 }
 
 .pi_up_container {
-  margin-top: 20px;
+  margin-top: 5px;
   display: flex;
   justify-content: center; /* Center the button */
 }
@@ -89,30 +83,31 @@ body {
 .pi_update_button {
   font-family: 'Montserrat', sans-serif;
   background-color: transparent;
-  color: #091a44;
-  border: 2px solid #091a44;
+  color: black;
+  border: 2px solid #5570F1; /* Set border color */
   padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;
-  width: 200px;
+  width: 200px; /* Fixed width for button */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
 }
 
 .pi_update_button:hover {
-  background-color: #091a44;
-  color: white;
+  background-color: #5570F1; /* Button color on hover */
+  color: white; /* Change text color on hover */
 }
 
 .pi_update_button:focus {
   outline: none;
 }
 
-
-/* Add this CSS for laptop view */
+/* Responsive adjustments */
 @media screen and (min-width: 768px) {
+  .pi_horizontal_container {
+    justify-content: space-between; /* Space between items */
+  }
+  
   .pi_horizontal_item img {
-    width: 100%;
-    max-width: 400px; /* Increase the maximum width for larger screens */
-    display: block;
-    margin: 0 auto;
+    max-width: 400px; /* Increase max-width for larger screens */
   }
 }
