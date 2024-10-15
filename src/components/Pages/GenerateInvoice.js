@@ -914,10 +914,6 @@ const handleMembershipChange = async (selectMembership) => {
                 )}
 
 
-                <div className="gbform-group" style={{marginTop:'10px'}}>
-                <label htmlFor="discount" >Discount:</label>
-                <input type="number" id="discount" className="gb_input-field" placeholder='Discount (In Rupees)' onChange={(e)=>setDiscount(e.target.value)}/>
-                </div>
 
                 {membershipStatus && (
                   <div className="gbform-group">

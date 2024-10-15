@@ -131,7 +131,6 @@ function AdminDashboard() {
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />
-                <SearchIcon />
               </div>
               <h2>Appointments</h2>
             </div>
@@ -192,7 +191,6 @@ function AdminDashboard() {
                   value={searchBillTerm}
                   onChange={handleBillSearchChange}
                 />
-                <SearchIcon />
               </div>
               <h2>Billing Table</h2>
             </div>

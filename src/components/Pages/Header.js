@@ -1,11 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../components/Styles/Header.css';
-import HomeSharpIcon from '@mui/icons-material/HomeSharp';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import Cookies from 'js-cookie';
-
 
 function Header() {
   const dropdownRef = useRef();
@@ -34,6 +31,15 @@ function Header() {
     };
   }, []);
 
+  const handleLogout = () => {
+    Cookies.remove('loggedIn');
+    Cookies.remove('type');
+    Cookies.remove('salonName');
+    Cookies.remove('branch_n');
+    Cookies.remove('salon-name');
+    navigate("/"); // Redirect to home or login page
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -55,13 +61,13 @@ function Header() {
                   <span className="nav-link">Service</span>
                 </button>
               ) : (
-                <Link to={`/${sname}/${branchName}/service`} className="nav-link">
-                  <div className="dropdown-item">
-                    <span>Service</span>
-                  </div>
+                <Link to={`/${sname}/${branchName}/service`} className="dropdown-item">
+                  <span>Service</span>
                 </Link>
               )}
-              {/* Add other dropdown items here if needed */}
+              <div className="dropdown-item" onClick={handleLogout}>
+                <span>Logout</span>
+              </div>
             </div>
           )}
         </div>

@@ -87,10 +87,7 @@
     transition: background-color 0.3s; /* Smooth hover effect */
 }
 
-/* Hover effect for add button */
-.cl_add:hover {
-    background-color:#090e29; /* Darker green on hover */
-}
+
 
 /* Divider styling */
 .cl_divider {
